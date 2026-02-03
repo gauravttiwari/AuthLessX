@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AuthLessX</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="navbar">
+            <h1>🔐 AuthLessX</h1>
+            <div class="nav-right">
+                <span id="user-name"></span>
+                <button onclick="logout()" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <main class="dashboard-main">
+            <div class="dashboard-header">
+                <h2>Mock Interview Dashboard</h2>
+                <p>Practice and improve your interview skills</p>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="stats-container" id="stats-section">
+                <div class="stat-card">
+                    <h3>Total Interviews</h3>
+                    <p class="stat-value" id="total-interviews">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Score</h3>
+                    <p class="stat-value" id="avg-score">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Technical</h3>
+                    <p class="stat-value" id="technical-score">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>HR</h3>
+                    <p class="stat-value" id="hr-score">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Aptitude</h3>
+                    <p class="stat-value" id="aptitude-score">0%</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Coding Round</h3>
+                    <p class="stat-value" id="coding-score">0%</p>
+                </div>
+            </div>
+
+            <!-- Interview Categories -->
+            <div class="categories-section">
+                <h3>Select Interview Category</h3>
+                <div class="category-cards">
+                    <div class="category-card" onclick="startInterview('technical')">
+                        <div class="category-icon">💻</div>
+                        <h4>Technical Interview</h4>
+                        <p>Test your programming and technical knowledge</p>
+                        <button class="btn-primary">Start Interview</button>
+                    </div>
+                    <div class="category-card" onclick="startInterview('hr')">
+                        <div class="category-icon">👔</div>
+                        <h4>HR Interview</h4>
+                        <p>Practice behavioral and soft skills questions</p>
+                        <button class="btn-primary">Start Interview</button>
+                    </div>
+                    <div class="category-card" onclick="startInterview('aptitude')">
+                        <div class="category-icon">🧮</div>
+                        <h4>Aptitude Test</h4>
+                        <p>Sharpen your logical and mathematical skills</p>
+                        <button class="btn-primary">Start Interview</button>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🚀</div>
+                        <h4>Coding Round</h4>
+                        <p>Write code and solve real programming problems</p>
+                        <button class="btn-primary" onclick="window.location.href='coding-category.html'">Start Coding</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview Section (Hidden by default) -->
+            <div id="interview-section" class="interview-section hidden">
+                <div class="interview-header">
+                    <h3 id="interview-title"></h3>
+                    <div class="timer">⏱️ Time: <span id="timer">00:00</span></div>
+                </div>
+
+                <div id="questions-container"></div>
+
+                <div class="interview-actions">
+                    <button onclick="submitInterview()" class="btn-primary">Submit Interview</button>
+                    <button onclick="cancelInterview()" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="results-section" class="results-section hidden">
+                <h3>Interview Results</h3>
+                <div class="result-card">
+                    <div class="score-circle">
+                        <span id="result-score">0%</span>
+                    </div>
+                    <p><strong>Correct Answers:</strong> <span id="result-correct">0</span> / <span id="result-total">0</span></p>
+                    <p><strong>Time Taken:</strong> <span id="result-time">0</span> seconds</p>
+                    <p class="feedback" id="result-feedback"></p>
+                    <button onclick="backToDashboard()" class="btn-primary">Back to Dashboard</button>
+                </div>
+            </div>
+
+            <!-- Interview History -->
+            <div class="history-section">
+                <h3>Recent Interview History</h3>
+                <div id="history-container" class="history-list"></div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

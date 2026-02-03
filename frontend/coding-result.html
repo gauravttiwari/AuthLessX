@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Result - AuthLessX</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .result-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 900px;
+            width: 90%;
+            padding: 50px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .status-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 0.6s ease-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .status-text {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .status-text.correct {
+            color: #10b981;
+        }
+
+        .status-text.incorrect {
+            color: #ef4444;
+        }
+
+        .score-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+        }
+
+        .score-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            animation: scaleIn 0.5s ease-out 0.3s both;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .score-circle.excellent {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .score-circle.good {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+
+        .score-circle.average {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+
+        .score-circle.poor {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .score-circle .score-value {
+            font-size: 3.5rem;
+        }
+
+        .score-circle .score-label {
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        .result-details {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #475569;
+        }
+
+        .detail-value {
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .feedback-box {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .feedback-box h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .feedback-box p {
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .error-box {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .error-box h3 {
+            color: #991b1b;
+            margin-bottom: 10px;
+        }
+
+        .error-box pre {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #dc2626;
+            font-size: 0.9rem;
+        }
+
+        .test-cases-section {
+            margin: 30px 0;
+        }
+
+        .test-cases-section h3 {
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .test-case {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .test-case.passed {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .test-case.failed {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .test-case-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .test-case-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .test-case-body {
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .test-case-body p {
+            margin: 5px 0;
+        }
+
+        .test-case-body code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: #64748b;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <div class="result-header">
+            <div class="status-icon" id="status-icon">✅</div>
+            <h1 class="status-text" id="status-text">Correct!</h1>
+        </div>
+
+        <div class="score-display">
+            <div class="score-circle excellent" id="score-circle">
+                <div class="score-value" id="score-value">100</div>
+                <div class="score-label">Score</div>
+            </div>
+        </div>
+
+        <div class="result-details">
+            <div class="detail-row">
+                <span class="detail-label">Test Cases Passed</span>
+                <span class="detail-value" id="test-cases-passed">0 / 0</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Time Taken</span>
+                <span class="detail-value" id="time-taken">0s</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Language Used</span>
+                <span class="detail-value" id="language-used">Python</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Question Type</span>
+                <span class="detail-value" id="question-type">DSA</span>
+            </div>
+        </div>
+
+        <div class="feedback-box" id="feedback-box">
+            <h3>📝 Feedback</h3>
+            <p id="feedback-text"></p>
+        </div>
+
+        <div class="error-box" id="error-box" style="display: none;">
+            <h3>❌ Error Details</h3>
+            <pre id="error-message"></pre>
+        </div>
+
+        <div class="test-cases-section" id="test-cases-section">
+            <h3>📊 Test Cases</h3>
+            <div id="test-cases-container"></div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-success" onclick="tryAgain()">
+                Try Another Question
+            </button>
+            <button class="btn btn-primary" onclick="viewHistory()">
+                View History
+            </button>
+            <button class="btn btn-secondary" onclick="goToDashboard()">
+                Back to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const resultData = sessionStorage.getItem('codingResult');
+            
+            if (!resultData) {
+                window.location.href = 'coding-category.html';
+                return;
+            }
+
+            const result = JSON.parse(resultData);
+            displayResult(result);
+        });
+
+        function displayResult(result) {
+            // Status
+            const isCorrect = result.status === 'Correct';
+            document.getElementById('status-icon').textContent = isCorrect ? '✅' : '❌';
+            document.getElementById('status-text').textContent = result.status;
+            document.getElementById('status-text').className = `status-text ${isCorrect ? 'correct' : 'incorrect'}`;
+
+            // Score
+            const scoreValue = result.score;
+            document.getElementById('score-value').textContent = scoreValue;
+            
+            const scoreCircle = document.getElementById('score-circle');
+            if (scoreValue >= 80) {
+                scoreCircle.className = 'score-circle excellent';
+            } else if (scoreValue >= 60) {
+                scoreCircle.className = 'score-circle good';
+            } else if (scoreValue >= 40) {
+                scoreCircle.className = 'score-circle average';
+            } else {
+                scoreCircle.className = 'score-circle poor';
+            }
+
+            // Details
+            document.getElementById('test-cases-passed').textContent = 
+                `${result.testCasesPassed} / ${result.totalTestCases}`;
+            
+            const minutes = Math.floor(result.timeTaken / 60);
+            const seconds = result.timeTaken % 60;
+            document.getElementById('time-taken').textContent = 
+                `${minutes}m ${seconds}s`;
+
+            // Feedback
+            document.getElementById('feedback-text').textContent = result.feedback;
+
+            // Error message if present
+            if (result.errorMessage) {
+                document.getElementById('error-box').style.display = 'block';
+                document.getElementById('error-message').textContent = result.errorMessage;
+            }
+
+            // Test cases
+            if (result.testResults && result.testResults.length > 0) {
+                const container = document.getElementById('test-cases-container');
+                container.innerHTML = '';
+
+                result.testResults.forEach((testCase, index) => {
+                    const testCaseDiv = document.createElement('div');
+                    testCaseDiv.className = `test-case ${testCase.passed ? 'passed' : 'failed'}`;
+                    
+                    testCaseDiv.innerHTML = `
+                        <div class="test-case-header">
+                            <span>Test Case ${index + 1}</span>
+                            <span class="test-case-status">
+                                ${testCase.passed ? '✅ Passed' : '❌ Failed'}
+                            </span>
+                        </div>
+                        <div class="test-case-body">
+                            <p><strong>Input:</strong> <code>${testCase.input}</code></p>
+                            <p><strong>Expected:</strong> <code>${testCase.expectedOutput}</code></p>
+                            <p><strong>Your Output:</strong> <code>${testCase.actualOutput || 'No output'}</code></p>
+                        </div>
+                    `;
+                    
+                    container.appendChild(testCaseDiv);
+                });
+            }
+        }
+
+        function tryAgain() {
+            sessionStorage.removeItem('codingResult');
+            window.location.href = 'coding-category.html';
+        }
+
+        function viewHistory() {
+            window.location.href = 'coding-history.html';
+        }
+
+        function goToDashboard() {
+            sessionStorage.removeItem('codingResult');
+            sessionStorage.removeItem('codingCategory');
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

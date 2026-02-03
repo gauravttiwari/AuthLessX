@@ -1,0 +1,11 @@
+{
+  "name": "authlessx-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for AuthLessX",
+  "scripts": {
+    "start": "npx http-server . -p 8080 -c-1 --cors"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

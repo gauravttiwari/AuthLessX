@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Round - AuthLessX</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .coding-category-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .coding-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .coding-header h1 {
+            font-size: 2.5rem;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .coding-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .category-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .coding-category-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coding-category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .coding-category-card.dsa {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .coding-category-card.programming {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .category-icon-large {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .coding-category-card h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .coding-category-card p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .coding-category-card .features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .coding-category-card .features li {
+            padding: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .coding-category-card .features li:before {
+            content: "✓ ";
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .start-coding-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .start-coding-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            background: #1d4ed8;
+        }
+
+        .stats-preview {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .stats-preview h4 {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .stat-item {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .stat-item strong {
+            display: block;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='dashboard.html'">
+        ← Back to Dashboard
+    </button>
+
+    <div class="coding-category-container">
+        <div class="coding-header">
+            <h1>🚀 Coding Round</h1>
+            <p>Test your programming skills with real-world problems</p>
+        </div>
+
+        <div class="category-selection">
+            <!-- DSA Category -->
+            <div class="coding-category-card dsa" onclick="selectCategory('DSA')">
+                <span class="category-icon-large">🧩</span>
+                <h2>Data Structures & Algorithms</h2>
+                <p>Master problem-solving with DSA questions</p>
+                
+                <ul class="features">
+                    <li>Arrays, Strings, Trees, Graphs</li>
+                    <li>Sorting, Searching algorithms</li>
+                    <li>Dynamic Programming</li>
+                    <li>Multiple difficulty levels</li>
+                </ul>
+
+                <div class="stats-preview" id="dsa-stats">
+                    <h4>Your DSA Stats</h4>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <strong id="dsa-attempts">0</strong>
+                            Attempts
+                        </div>
+                        <div class="stat-item">
+                            <strong id="dsa-score">0%</strong>
+                            Avg Score
+                        </div>
+                    </div>
+                </div>
+
+                <button class="start-coding-btn">Start DSA Round →</button>
+            </div>
+
+            <!-- Programming Category -->
+            <div class="coding-category-card programming" onclick="selectCategory('Programming')">
+                <span class="category-icon-large">💻</span>
+                <h2>Programming Basics</h2>
+                <p>Practice fundamental programming concepts</p>
+                
+                <ul class="features">
+                    <li>Logic Building problems</li>
+                    <li>Pattern printing, Loops</li>
+                    <li>Functions, Recursion</li>
+                    <li>Math & String operations</li>
+                </ul>
+
+                <div class="stats-preview" id="prog-stats">
+                    <h4>Your Programming Stats</h4>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <strong id="prog-attempts">0</strong>
+                            Attempts
+                        </div>
+                        <div class="stat-item">
+                            <strong id="prog-score">0%</strong>
+                            Avg Score
+                        </div>
+                    </div>
+                </div>
+
+                <button class="start-coding-btn">Start Programming Round →</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/crypto.js"></script>
+    <script src="js/coding.js"></script>
+    <script>
+        // Load user stats on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/coding/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const stats = data.data;
+
+                    // Update DSA stats
+                    document.getElementById('dsa-attempts').textContent = stats.byType.DSA.attempts;
+                    document.getElementById('dsa-score').textContent = stats.byType.DSA.avgScore + '%';
+
+                    // Update Programming stats
+                    document.getElementById('prog-attempts').textContent = stats.byType.Programming.attempts;
+                    document.getElementById('prog-score').textContent = stats.byType.Programming.avgScore + '%';
+                }
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        });
+
+        function selectCategory(type) {
+            sessionStorage.setItem('codingCategory', type);
+            window.location.href = 'coding-question.html';
+        }
+    </script>
+</body>
+</html>
