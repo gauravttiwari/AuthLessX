@@ -45,6 +45,7 @@ async function authenticateToken(req, res, next) {
 
         next();
     } catch (error) {
+        console.error('Authentication error:', error);
         res.status(500).json({ 
             success: false, 
             message: 'Authentication failed' 

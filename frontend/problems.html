@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Problems - AuthLessX</title>
+    <link rel="stylesheet" href="css/style-new.css">
+</head>
+<body>
+    <script src="js/navbar-auth.js"></script>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 onclick="window.location.href='home.html'" style="cursor: pointer;">🔐 AuthLessX</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="problems.html" class="active">Practice</a>
+                <a href="courses.html">Courses</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="core-skills.html">Core Skills</a>
+                <a href="#" class="premium-link">Pro</a>
+            </div>
+            <div class="nav-auth">
+                <button onclick="window.location.href='login.html?mode=signin'" class="btn-secondary">Sign In</button>
+                <button onclick="window.location.href='login.html?mode=signup'" class="btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="problems-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar">
+            <div class="filter-section">
+                <h3>📑 Lists</h3>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="radio" name="list" value="all" checked onchange="applyFilters()">
+                        <span>All Problems</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="list" value="blind75" onchange="applyFilters()">
+                        <span>Blind 75</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="list" value="authlessx150" onchange="applyFilters()">
+                        <span>AuthLessX 150</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="radio" name="list" value="authlessx250" onchange="applyFilters()">
+                        <span>🔥 AuthLessX All</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>📊 Difficulty</h3>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" value="Easy" checked onchange="applyFilters()">
+                        <span class="easy-label">Easy</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Medium" checked onchange="applyFilters()">
+                        <span class="medium-label">Medium</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Hard" checked onchange="applyFilters()">
+                        <span class="hard-label">Hard</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>✅ Status</h3>
+                <div class="filter-options">
+                    <label class="filter-option">
+                        <input type="checkbox" value="solved" checked onchange="applyFilters()">
+                        <span>Solved</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="unsolved" checked onchange="applyFilters()">
+                        <span>Unsolved</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <h3>🏷️ Topics</h3>
+                <div class="filter-options topics-list">
+                    <label class="filter-option">
+                        <input type="checkbox" value="Arrays & Hashing" checked onchange="applyFilters()">
+                        <span>Arrays & Hashing</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Two Pointers" checked onchange="applyFilters()">
+                        <span>Two Pointers</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Sliding Window" checked onchange="applyFilters()">
+                        <span>Sliding Window</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Stack" checked onchange="applyFilters()">
+                        <span>Stack</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Binary Search" checked onchange="applyFilters()">
+                        <span>Binary Search</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Linked List" checked onchange="applyFilters()">
+                        <span>Linked List</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Trees" checked onchange="applyFilters()">
+                        <span>Trees</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="Graphs" checked onchange="applyFilters()">
+                        <span>Graphs</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="1-D DP" checked onchange="applyFilters()">
+                        <span>1-D DP</span>
+                    </label>
+                    <label class="filter-option">
+                        <input type="checkbox" value="2-D DP" checked onchange="applyFilters()">
+                        <span>2-D DP</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn-reset" onclick="resetFilters()">Reset All Filters</button>
+        </aside>
+
+        <!-- Problems List -->
+        <main class="problems-main">
+            <div class="problems-header">
+                <div class="header-top">
+                    <h1>Practice Problems</h1>
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search problems..." id="search-input" onkeyup="applyFilters()">
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <span id="problems-count">Loading...</span>
+                    <span id="solved-count"></span>
+                </div>
+            </div>
+
+            <div class="problems-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th width="5%">Status</th>
+                            <th width="40%">Title</th>
+                            <th width="15%">Topic</th>
+                            <th width="12%">Difficulty</th>
+                            <th width="13%">Acceptance</th>
+                            <th width="15%">Video</th>
+                        </tr>
+                    </thead>
+                    <tbody id="problems-tbody">
+                        <!-- Problems will be loaded here -->
+                        <tr>
+                            <td colspan="6" class="loading-cell">
+                                <div class="loader"></div>
+                                Loading problems...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be added here -->
+            </div>
+        </main>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/questions-bank.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+    </script>
+    <script src="js/problems.js"></script>
+</body>
+</html>

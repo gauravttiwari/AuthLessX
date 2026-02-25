@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coding Round - AuthLessX</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style-new.css">
     <style>
         .coding-category-container {
             max-width: 1200px;
-            margin: 50px auto;
+            margin: 100px auto 50px;
             padding: 20px;
         }
 
@@ -114,23 +114,23 @@
         }
 
         .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #2563eb;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
+            margin-bottom: 30px;
+            transition: transform 0.2s;
         }
 
         .back-button:hover {
-            background: #1d4ed8;
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         .stats-preview {
@@ -165,11 +165,32 @@
     </style>
 </head>
 <body>
-    <button class="back-button" onclick="window.location.href='dashboard.html'">
-        ← Back to Dashboard
-    </button>
+    <script src="js/navbar-auth.js"></script>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 onclick="window.location.href='home.html'" style="cursor: pointer;">🔐 AuthLessX</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="problems.html">Practice</a>
+                <a href="courses.html">Courses</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="core-skills.html">Core Skills</a>
+                <a href="#" class="premium-link">Pro</a>
+            </div>
+            <div class="nav-auth">
+                <button onclick="window.location.href='login.html?mode=signin'" class="btn-secondary">Sign In</button>
+                <button onclick="window.location.href='login.html?mode=signup'" class="btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
 
     <div class="coding-category-container">
+        <button class="back-button" onclick="window.location.href='dashboard.html'">
+            ← Back to Dashboard
+        </button>
         <div class="coding-header">
             <h1>🚀 Coding Round</h1>
             <p>Test your programming skills with real-world problems</p>
@@ -241,35 +262,12 @@
     <script src="js/crypto.js"></script>
     <script src="js/coding.js"></script>
     <script>
-        // Load user stats on page load
-        window.addEventListener('DOMContentLoaded', async () => {
+        // Check authentication
+        window.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('authToken');
             if (!token) {
-                window.location.href = 'index.html';
+                window.location.href = 'login.html';
                 return;
-            }
-
-            try {
-                const response = await fetch('http://localhost:5000/api/coding/stats', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    const stats = data.data;
-
-                    // Update DSA stats
-                    document.getElementById('dsa-attempts').textContent = stats.byType.DSA.attempts;
-                    document.getElementById('dsa-score').textContent = stats.byType.DSA.avgScore + '%';
-
-                    // Update Programming stats
-                    document.getElementById('prog-attempts').textContent = stats.byType.Programming.attempts;
-                    document.getElementById('prog-score').textContent = stats.byType.Programming.avgScore + '%';
-                }
-            } catch (error) {
-                console.error('Failed to load stats:', error);
             }
         });
 

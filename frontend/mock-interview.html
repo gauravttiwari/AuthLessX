@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview - AuthLessX</title>
+    <link rel="stylesheet" href="css/style-new.css">
+</head>
+<body>
+    <script src="js/navbar-auth.js"></script>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 onclick="window.location.href='home.html'" style="cursor: pointer;">🔐 AuthLessX</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="problems.html">Practice</a>
+                <a href="courses.html">Courses</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="core-skills.html">Core Skills</a>
+                <a href="#" class="premium-link">Pro</a>
+            </div>
+            <div class="nav-auth">
+                <button onclick="window.location.href='login.html?mode=signin'" class="btn-secondary">Sign In</button>
+                <button onclick="window.location.href='login.html?mode=signup'" class="btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mock-interview-container">
+        <!-- Setup Screen -->
+        <div class="setup-screen" id="setup-screen">
+            <div class="setup-card">
+                <div class="setup-header">
+                    <h1>🎤 Mock Interview Setup</h1>
+                    <p>Practice under real interview conditions</p>
+                </div>
+
+                <div class="setup-content">
+                    <!-- Interview Type -->
+                    <div class="setup-section">
+                        <h3>1. Choose Interview Type</h3>
+                        <div class="interview-types">
+                            <label class="type-card">
+                                <input type="radio" name="interview-type" value="coding" checked>
+                                <div class="type-content">
+                                    <div class="type-icon">💻</div>
+                                    <h4>Coding Round</h4>
+                                    <p>Solve coding problems with time limits</p>
+                                </div>
+                            </label>
+                            <label class="type-card">
+                                <input type="radio" name="interview-type" value="technical">
+                                <div class="type-content">
+                                    <div class="type-icon">🔧</div>
+                                    <h4>Technical Round</h4>
+                                    <p>Theoretical questions on CS fundamentals</p>
+                                </div>
+                            </label>
+                            <label class="type-card">
+                                <input type="radio" name="interview-type" value="hr">
+                                <div class="type-content">
+                                    <div class="type-icon">👔</div>
+                                    <h4>HR Round</h4>
+                                    <p>Behavioral and situational questions</p>
+                                </div>
+                            </label>
+                            <label class="type-card">
+                                <input type="radio" name="interview-type" value="aptitude">
+                                <div class="type-content">
+                                    <div class="type-icon">🧮</div>
+                                    <h4>Aptitude Round</h4>
+                                    <p>Logical and quantitative aptitude</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Coding Options (only shown if Coding Round selected) -->
+                    <div class="setup-section" id="coding-options">
+                        <h3>2. Select Problem Type</h3>
+                        <div class="option-group">
+                            <label class="option-item">
+                                <input type="radio" name="problem-type" value="DSA" checked>
+                                <span>Data Structures & Algorithms</span>
+                            </label>
+                            <label class="option-item">
+                                <input type="radio" name="problem-type" value="Programming">
+                                <span>General Programming</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Difficulty Level -->
+                    <div class="setup-section">
+                        <h3 id="difficulty-label">3. Select Difficulty</h3>
+                        <div class="difficulty-options">
+                            <label class="difficulty-card easy-card">
+                                <input type="radio" name="difficulty" value="Easy">
+                                <span>Easy</span>
+                            </label>
+                            <label class="difficulty-card medium-card">
+                                <input type="radio" name="difficulty" value="Medium" checked>
+                                <span>Medium</span>
+                            </label>
+                            <label class="difficulty-card hard-card">
+                                <input type="radio" name="difficulty" value="Hard">
+                                <span>Hard</span>
+                            </label>
+                            <label class="difficulty-card mix-card">
+                                <input type="radio" name="difficulty" value="Mixed">
+                                <span>Mixed</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Language Selection (for coding) -->
+                    <div class="setup-section" id="language-selection">
+                        <h3>4. Programming Language</h3>
+                        <select class="language-select" id="language-select">
+                            <option value="python">Python</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="java">Java</option>
+                            <option value="cpp">C++</option>
+                            <option value="c">C</option>
+                        </select>
+                    </div>
+
+                    <!-- Number of Questions -->
+                    <div class="setup-section">
+                        <h3 id="questions-label">5. Number of Questions</h3>
+                        <select class="questions-select" id="questions-count">
+                            <option value="3">3 Questions</option>
+                            <option value="5" selected>5 Questions</option>
+                            <option value="10">10 Questions</option>
+                            <option value="15">15 Questions</option>
+                        </select>
+                    </div>
+
+                    <!-- Topic Selection (optional for coding) -->
+                    <div class="setup-section" id="topic-selection" style="display: none;">
+                        <h3>6. Focus Topics (Optional)</h3>
+                        <div class="topics-multiselect">
+                            <label><input type="checkbox" value="Arrays & Hashing"> Arrays & Hashing</label>
+                            <label><input type="checkbox" value="Two Pointers"> Two Pointers</label>
+                            <label><input type="checkbox" value="Sliding Window"> Sliding Window</label>
+                            <label><input type="checkbox" value="Stack"> Stack</label>
+                            <label><input type="checkbox" value="Binary Search"> Binary Search</label>
+                            <label><input type="checkbox" value="Linked List"> Linked List</label>
+                            <label><input type="checkbox" value="Trees"> Trees</label>
+                            <label><input type="checkbox" value="Graphs"> Graphs</label>
+                            <label><input type="checkbox" value="1-D DP"> Dynamic Programming</label>
+                        </div>
+                    </div>
+
+                    <button class="btn-start-interview" onclick="startInterview()">
+                        🚀 Start Interview
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interview Screen -->
+        <div class="interview-screen" id="interview-screen" style="display: none;">
+            <div class="interview-header">
+                <div class="interview-progress">
+                    <span id="current-question">Question 1</span> of <span id="total-questions">5</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="interview-timer">
+                    <span class="timer-icon">⏱️</span>
+                    <span id="interview-timer-display">00:00</span>
+                </div>
+                <button class="btn-end-interview" onclick="confirmEndInterview()">End Interview</button>
+            </div>
+
+            <div class="interview-content" id="interview-content">
+                <!-- Content will be loaded based on interview type -->
+            </div>
+
+            <div class="interview-navigation">
+                <button class="btn-nav" id="prev-btn" onclick="previousQuestion()" disabled>← Previous</button>
+                <button class="btn-nav" id="skip-btn" onclick="skipQuestion()">Skip →</button>
+                <button class="btn-nav btn-submit" id="next-btn" onclick="nextQuestion()">Next →</button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="results-screen" id="results-screen" style="display: none;">
+            <div class="results-card">
+                <div class="results-header">
+                    <h1>🎉 Interview Complete!</h1>
+                    <div class="overall-score">
+                        <div class="score-circle">
+                            <span id="overall-percentage">0%</span>
+                        </div>
+                        <p>Overall Performance</p>
+                    </div>
+                </div>
+
+                <div class="results-breakdown">
+                    <div class="breakdown-card">
+                        <h3>✓ Correct</h3>
+                        <p class="breakdown-value" id="correct-count">0</p>
+                    </div>
+                    <div class="breakdown-card">
+                        <h3>✗ Incorrect</h3>
+                        <p class="breakdown-value" id="incorrect-count">0</p>
+                    </div>
+                    <div class="breakdown-card">
+                        <h3>⊘ Skipped</h3>
+                        <p class="breakdown-value" id="skipped-count">0</p>
+                    </div>
+                    <div class="breakdown-card">
+                        <h3>⏱️ Time Taken</h3>
+                        <p class="breakdown-value" id="time-taken">0:00</p>
+                    </div>
+                </div>
+
+                <div class="weak-areas" id="weak-areas">
+                    <h3>📊 Areas to Improve</h3>
+                    <div id="weak-areas-list">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="recommendations" id="recommendations">
+                    <h3>💡 Recommendations</h3>
+                    <div id="recommendations-list">
+                        <!-- Will be populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button class="btn-review" onclick="reviewAnswers()">📝 Review Answers</button>
+                    <button class="btn-new" onclick="location.reload()">🔄 New Interview</button>
+                    <button class="btn-dashboard" onclick="window.location.href='dashboard-main.html'">📊 Dashboard</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/mock-interview.js"></script>
+</body>
+</html>

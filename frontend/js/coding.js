@@ -6,7 +6,8 @@ const CODING_API_URL = 'http://localhost:5000/api/coding';
 function getAuthToken() {
     const token = localStorage.getItem('authToken');
     if (!token) {
-        window.location.href = 'index.html';
+        // Redirect to login page if not authenticated
+        window.location.href = 'login.html?mode=signin';
         return null;
     }
     return token;

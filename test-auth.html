@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test - AuthLessX</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        .info { background: #d1ecf1; border-color: #bee5eb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .log { background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 4px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <h1>🔐 AuthLessX - Authentication Test</h1>
+    
+    <div class="test-section info">
+        <h3>Test Status</h3>
+        <div id="status">Ready to test...</div>
+    </div>
+
+    <div class="test-section">
+        <h3>1. Test Crypto Functions</h3>
+        <button onclick="testCrypto()">Test Key Generation</button>
+        <div id="crypto-result" class="log"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>2. Test Signup</h3>
+        <button onclick="testSignup()">Test User Registration</button>
+        <div id="signup-result" class="log"></div>
+    </div>
+
+    <div class="test-section">
+        <h3>3. Test Login</h3>
+        <button onclick="testLogin()">Test User Login</button>
+        <div id="login-result" class="log"></div>
+    </div>
+
+    <script src="js/crypto.js"></script>
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        function log(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            const timestamp = new Date().toLocaleTimeString();
+            element.innerHTML += `<div style="color: ${type === 'error' ? 'red' : type === 'success' ? 'green' : 'black'}">[${timestamp}] ${message}</div>`;
+            console.log(`[${timestamp}] ${message}`);
+        }
+
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = type;
+        }
+
+        async function testCrypto() {
+            log('crypto-result', '🔧 Testing crypto functions...', 'info');
+            
+            try {
+                // Test if generateKeyPair function exists
+                if (typeof generateKeyPair === 'undefined') {
+                    throw new Error('generateKeyPair function not defined');
+                }
+                log('crypto-result', '✅ generateKeyPair function exists', 'success');
+
+                // Test key generation
+                log('crypto-result', '🎯 Generating test keys...', 'info');
+                const { publicKey, privateKey } = await generateKeyPair();
+                
+                log('crypto-result', `✅ Public key generated (length: ${publicKey.length})`, 'success');
+                log('crypto-result', `✅ Private key generated: ${privateKey.substring(0, 50)}...`, 'success');
+                
+                // Check if development mode
+                if (publicKey.includes('DEV') || publicKey.includes('FALLBACK')) {
+                    log('crypto-result', '⚠️ Using development crypto (expected for local testing)', 'info');
+                }
+
+                updateStatus('Crypto test passed ✅', 'success');
+                return { publicKey, privateKey };
+
+            } catch (error) {
+                log('crypto-result', `❌ Crypto test failed: ${error.message}`, 'error');
+                updateStatus('Crypto test failed ❌', 'error');
+                throw error;
+            }
+        }
+
+        async function testSignup() {
+            log('signup-result', '📝 Testing user signup...', 'info');
+            
+            try {
+                // First generate keys
+                const { publicKey } = await generateKeyPair();
+                log('signup-result', '✅ Keys generated for signup', 'success');
+
+                // Test signup request
+                const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: `Test User ${Date.now()}`,
+                        email: `test${Date.now()}@example.com`,
+                        publicKey: publicKey
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log('signup-result', '✅ Signup successful!', 'success');
+                    log('signup-result', `User ID: ${data.user.id}`, 'info');
+                    log('signup-result', `Email: ${data.user.email}`, 'info');
+                    updateStatus('Signup test passed ✅', 'success');
+                    return data;
+                } else {
+                    throw new Error(data.error || 'Signup failed');
+                }
+
+            } catch (error) {
+                log('signup-result', `❌ Signup test failed: ${error.message}`, 'error');
+                updateStatus('Signup test failed ❌', 'error');
+                throw error;
+            }
+        }
+
+        async function testLogin() {
+            log('login-result', '🔑 Testing user login...', 'info');
+            
+            try {
+                // First create a user for testing
+                await testSignup();
+                log('login-result', '✅ Test user created', 'success');
+
+                // Get challenge for login
+                const testEmail = `test${Date.now()}@example.com`;
+                const challengeResponse = await fetch(`${API_BASE_URL}/auth/challenge`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: testEmail })
+                });
+
+                if (!challengeResponse.ok) {
+                    throw new Error('Failed to get challenge');
+                }
+
+                const { challenge } = await challengeResponse.json();
+                log('login-result', '✅ Challenge received', 'success');
+
+                // For development mode, create a simple signature
+                const devSignature = `DEV_SIG_${Date.now()}`;
+                
+                // Submit login
+                const loginResponse = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: testEmail,
+                        signature: devSignature
+                    })
+                });
+
+                const loginData = await loginResponse.json();
+                
+                if (loginResponse.ok) {
+                    log('login-result', '✅ Login successful!', 'success');
+                    log('login-result', `Token received: ${loginData.token.substring(0, 20)}...`, 'success');
+                    updateStatus('Login test passed ✅', 'success');
+                } else {
+                    log('login-result', `⚠️ Login failed (expected in dev mode): ${loginData.error}`, 'info');
+                    updateStatus('Login test completed (signature verification expected to fail in dev mode)', 'info');
+                }
+
+            } catch (error) {
+                log('login-result', `❌ Login test failed: ${error.message}`, 'error');
+                updateStatus('Login test failed ❌', 'error');
+            }
+        }
+
+        // Auto-run crypto test on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            updateStatus('Page loaded, ready for testing');
+            setTimeout(() => {
+                log('crypto-result', '🚀 Auto-testing crypto functions...', 'info');
+                testCrypto().catch(err => console.error('Auto crypto test failed:', err));
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

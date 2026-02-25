@@ -13,61 +13,31 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Disable Express logging
-app.set('env', 'production');
-
-// MongoDB Connection with fallback
-const connectDB = async () => {
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/authlessx';
-    
-    try {
-        await mongoose.connect(mongoURI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-        });
-        console.log('✅ MongoDB Connected Successfully');
-        console.log(`📍 Database: ${mongoURI.includes('localhost') ? 'Local MongoDB' : 'MongoDB Atlas'}`);
-    } catch (err) {
-        console.error('❌ MongoDB Connection Error:', err.message);
-        console.log('⚠️  Using in-memory database fallback...');
-        
-        // Fallback to in-memory MongoDB
-        try {
-            const { MongoMemoryServer } = require('mongodb-memory-server');
-            const mongod = await MongoMemoryServer.create();
-            const uri = mongod.getUri();
-            
-            await mongoose.connect(uri, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            });
-            console.log('✅ In-Memory MongoDB Started Successfully');
-            console.log('⚠️  Note: Data will not persist after server restart');
-        } catch (fallbackErr) {
-            console.error('❌ Failed to start in-memory database:', fallbackErr.message);
-            process.exit(1);
-        }
-    }
-};
-
-connectDB();
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('✅ MongoDB Connected Successfully'))
+.catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 // Import Routes
 const authRoutes = require('./routes/auth');
 const interviewRoutes = require('./routes/interview');
+const problemsRoutes = require('./routes/problems');
 const codingRoutes = require('./routes/coding');
-
-// Favicon handler (prevents 404 errors) - must be before static files
-app.get('/favicon.ico', (req, res) => res.status(204).end());
-
-// Serve static files from frontend
-app.use(express.static('../frontend'));
+const coinsRoutes = require('./routes/coins');
+const contributionsRoutes = require('./routes/contributions');
+const coursesRoutes = require('./routes/courses');
 
 // Use Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/interview', interviewRoutes);
+app.use('/api/problems', problemsRoutes);
 app.use('/api/coding', codingRoutes);
+app.use('/api/coins', coinsRoutes);
+app.use('/api/contributions', contributionsRoutes);
+app.use('/api/courses', coursesRoutes);
 
 // Health Check Route
 app.get('/api/health', (req, res) => {

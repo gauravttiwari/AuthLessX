@@ -2,7 +2,7 @@
  * Dashboard functionality for Mock Interview System
  */
 
-const API_BASE_URL = 'http://localhost:5000/api';
+// API_BASE_URL is defined in crypto.js
 let currentCategory = '';
 let questions = [];
 let userAnswers = [];
@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     const userName = localStorage.getItem('userName');
 
     if (!token) {
-        window.location.href = 'index.html';
+        window.location.href = 'login.html?mode=signin';
         return;
     }
 
@@ -34,7 +34,7 @@ function logout() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('userName');
     localStorage.removeItem('userEmail');
-    window.location.href = 'index.html';
+    window.location.href = 'home.html';
 }
 
 /**
@@ -58,20 +58,6 @@ async function loadStatistics() {
             document.getElementById('technical-score').textContent = stats.byCategory.technical.avgScore + '%';
             document.getElementById('hr-score').textContent = stats.byCategory.hr.avgScore + '%';
             document.getElementById('aptitude-score').textContent = stats.byCategory.aptitude.avgScore + '%';
-        }
-
-        // Load coding stats separately
-        const codingResponse = await fetch(`${API_BASE_URL}/coding/stats`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        
-        if (codingResponse.ok) {
-            const codingData = await codingResponse.json();
-            if (codingData.success) {
-                document.getElementById('coding-score').textContent = codingData.data.averageScore + '%';
-            }
         }
     } catch (error) {
         console.error('Failed to load statistics:', error);
@@ -150,9 +136,9 @@ async function startInterview(category) {
             userAnswers = new Array(questions.length).fill(null);
 
             // Hide categories, show interview section
-            document.querySelector('.categories-section').classList.add('hidden');
-            document.querySelector('.history-section').classList.add('hidden');
-            document.getElementById('interview-section').classList.remove('hidden');
+            document.querySelector('.categories-section').style.display = 'none';
+            document.querySelector('.history-section').style.display = 'none';
+            document.getElementById('interview-section').style.display = 'block';
 
             // Set title
             document.getElementById('interview-title').textContent = 
@@ -169,15 +155,6 @@ async function startInterview(category) {
         console.error('Failed to start interview:', error);
         alert('Failed to start interview. Please try again.');
     }
-}
-
-/**
- * Start coding round
- */
-function startCoding() {
-    console.log('startCoding function called');
-    console.log('Navigating to: coding-category.html');
-    window.location.href = 'coding-category.html';
 }
 
 /**
@@ -266,8 +243,8 @@ async function submitInterview() {
  * Show results
  */
 function showResults(results) {
-    document.getElementById('interview-section').classList.add('hidden');
-    document.getElementById('results-section').classList.remove('hidden');
+    document.getElementById('interview-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'block';
 
     document.getElementById('result-score').textContent = results.score + '%';
     document.getElementById('result-correct').textContent = results.correctAnswers;
@@ -302,10 +279,10 @@ function cancelInterview() {
  * Back to dashboard
  */
 async function backToDashboard() {
-    document.getElementById('interview-section').classList.add('hidden');
-    document.getElementById('results-section').classList.add('hidden');
-    document.querySelector('.categories-section').classList.remove('hidden');
-    document.querySelector('.history-section').classList.remove('hidden');
+    document.getElementById('interview-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'none';
+    document.querySelector('.categories-section').style.display = 'block';
+    document.querySelector('.history-section').style.display = 'block';
 
     // Reload statistics and history
     await loadStatistics();

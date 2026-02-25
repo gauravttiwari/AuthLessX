@@ -1,0 +1,839 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Core Skills - AuthLessX</title>
+    <link rel="stylesheet" href="css/style-new.css">
+</head>
+<body>
+    <script src="js/navbar-auth.js"></script>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 onclick="window.location.href='home.html'" style="cursor: pointer;">🔒 AuthLessX</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="problems.html">Practice</a>
+                <a href="courses.html">Courses</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="core-skills.html" class="active">Core Skills</a>
+                <a href="#" class="premium-link">Pro</a>
+            </div>
+            <div class="nav-auth">
+                <button onclick="window.location.href='login.html?mode=signin'" class="btn-secondary">Sign In</button>
+                <button onclick="window.location.href='login.html?mode=signup'" class="btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Course Cards Section -->
+    <div class="courses-showcase">
+        <div class="course-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="course-icon">📘</div>
+            <div class="course-info">
+                <h3>Algorithms & Data Structures for Beginners</h3>
+            </div>
+        </div>
+        <div class="course-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+            <div class="course-icon">🧠</div>
+            <div class="course-info">
+                <h3>Advanced Algorithms</h3>
+            </div>
+        </div>
+        <div class="course-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+            <div class="course-icon">⚙️</div>
+            <div class="course-info">
+                <h3>System Design for Beginners</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="core-skills-container">
+        <!-- Top Navigation Tabs -->
+        <div class="practice-nav-tabs">
+            <button class="practice-tab active">📚 Core Skills</button>
+            <button class="practice-tab">🚀 AuthLessX 150</button>
+            <button class="practice-tab">🌟 System Design</button>
+        </div>
+
+        <!-- Content Section with Sidebar -->
+        <div class="content-with-sidebar">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Description and Progress -->
+                <div class="skills-header">
+                    <div class="header-left">
+                        <div class="info-icon">ℹ️</div>
+                        <p class="description">Implement common data structures, algorithms, design patterns, and machine learning concepts.</p>
+                    </div>
+                    <div class="header-right">
+                        <div class="progress-breakdown">
+                            <div class="progress-item">
+                                <span class="label easy-color">Easy</span>
+                                <span class="value" id="easyProgress">0/25</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="label medium-color">Med</span>
+                                <span class="value" id="medProgress">0/75</span>
+                            </div>
+                            <div class="progress-item">
+                                <span class="label hard-color">Hard</span>
+                                <span class="value" id="hardProgress">0/50</span>
+                            </div>
+                        </div>
+                        <div class="circular-progress">
+                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="52" fill="none" stroke="#2a2a2a" stroke-width="8"/>
+                                <circle id="progressCircle" cx="60" cy="60" r="52" fill="none" stroke="#22c55e" stroke-width="8" 
+                                    stroke-dasharray="326.73" stroke-dashoffset="326.73" 
+                                    transform="rotate(-90 60 60)" stroke-linecap="round"/>
+                                <text x="60" y="55" text-anchor="middle" fill="#fff" font-size="24" font-weight="bold" id="solvedCount">0</text>
+                                <text x="60" y="70" text-anchor="middle" fill="#fff" font-size="14" id="totalCount">/150</text>
+                                <text x="60" y="85" text-anchor="middle" fill="#888" font-size="11">Solved</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="search-filters">
+                    <div class="search-box">
+                        <input type="text" placeholder="Search" id="problemSearch">
+                        <button class="search-btn">🔍</button>
+                    </div>
+                    <button class="filter-btn">🎚️</button>
+                    <button class="filter-btn">✕</button>
+                    <button class="action-btn">🗑️</button>
+                    <button class="action-btn">📋</button>
+                </div>
+
+                <!-- Category Filter Buttons -->
+                <div class="category-filters">
+                    <button class="category-btn active" data-category="all">
+                        <span class="icon">📊</span> Algorithms
+                    </button>
+                    <button class="category-btn" data-category="data-structures">
+                        <span class="icon">🌲</span> Data Structures
+                    </button>
+                    <button class="category-btn" data-category="design-patterns">
+                        <span class="icon">🎨</span> Design Patterns
+                    </button>
+                    <button class="category-btn" data-category="sql">
+                        <span class="icon">🗄️</span> SQL <span class="new-badge">NEW</span>
+                    </button>
+                    <button class="category-btn" data-category="machine-learning">
+                        <span class="icon">🤖</span> Machine Learning
+                    </button>
+                </div>
+
+        <!-- Problems Container -->
+        <div class="core-skills-content">
+            
+            <!-- Sorting Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Sorting & Searching</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="853" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Car Fleet</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Graphs Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Graphs</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="200" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Number of Islands</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="133" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Clone Graph</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="417" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Pacific Atlantic Water Flow</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="207" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Course Schedule</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Arrays & Hashing Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Arrays & Hashing</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="1" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Two Sum</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="49" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Group Anagrams</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="347" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Top K Frequent Elements</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="238" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Product of Array Except Self</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="128" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Longest Consecutive Sequence</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Two Pointers Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Two Pointers</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="125" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Valid Palindrome</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="15" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">3Sum</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="11" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Container With Most Water</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="42" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Trapping Rain Water</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Stack Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Stack</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="20" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Valid Parentheses</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="155" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Min Stack</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="150" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Evaluate Reverse Polish Notation</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="22" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Generate Parentheses</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="84" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Largest Rectangle in Histogram</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Binary Search Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Binary Search</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="704" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Binary Search</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="74" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Search a 2D Matrix</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="33" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Search in Rotated Sorted Array</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="4" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Median of Two Sorted Arrays</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Linked List Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Linked List</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="206" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Reverse Linked List</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="21" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Merge Two Sorted Lists</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="143" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Reorder List</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="19" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Remove Nth Node From End of List</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="23" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Merge K Sorted Lists</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Trees Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Trees</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="226" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Invert Binary Tree</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="104" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Maximum Depth of Binary Tree</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="100" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Same Tree</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="102" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Binary Tree Level Order Traversal</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="105" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Construct Binary Tree from Preorder and Inorder</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="98" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Validate Binary Search Tree</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="124" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Binary Tree Maximum Path Sum</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="297" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Serialize and Deserialize Binary Tree</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Heap / Priority Queue Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Heap / Priority Queue</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="703" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Kth Largest Element in a Stream</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="215" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Kth Largest Element in an Array</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="295" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Find Median from Data Stream</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Backtracking Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Backtracking</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="39" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Combination Sum</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="79" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Word Search</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="51" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">N-Queens</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tries Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Tries</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="208" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Implement Trie (Prefix Tree)</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="211" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Design Add and Search Words Data Structure</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="212" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Word Search II</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Dynamic Programming Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Dynamic Programming</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="70" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Climbing Stairs</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="198" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">House Robber</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="322" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Coin Change</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="300" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Longest Increasing Subsequence</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="hard" class="clickable-problem" data-problem-id="72" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Edit Distance</td>
+                            <td><span class="badge badge-hard">Hard</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Greedy Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Greedy</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="easy" class="clickable-problem" data-problem-id="121" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Best Time to Buy and Sell Stock</td>
+                            <td><span class="badge badge-easy">Easy</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="55" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Jump Game</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="45" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Jump Game II</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Intervals Section -->
+            <div class="problem-section" data-category="algorithms">
+                <h2 class="section-title">Intervals</h2>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th width="40"></th>
+                            <th>Problem</th>
+                            <th width="100">Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="57" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Insert Interval</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="56" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Merge Intervals</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                        <tr data-difficulty="medium" class="clickable-problem" data-problem-id="435" data-category="DSA">
+                            <td><input type="checkbox" class="problem-checkbox"></td>
+                            <td class="problem-title">Non-overlapping Intervals</td>
+                            <td><span class="badge badge-medium">Medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            </div><!-- End core-skills-content -->
+            </div><!-- End main-content -->
+
+            <!-- Right Sidebar -->
+            <div class="skills-sidebar">
+                <!-- Calendar Section -->
+                <div class="calendar-widget">
+                    <div class="calendar-header">
+                        <button class="nav-btn">‹</button>
+                        <h3>February 2026</h3>
+                        <button class="nav-btn">›</button>
+                    </div>
+                    <div class="calendar-info">
+                        <p class="day-label">Day <span class="day-number">8</span></p>
+                        <p class="time-remaining">10:53:25 left</p>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">S</div>
+                        <div class="calendar-day-header">M</div>
+                        <div class="calendar-day-header">T</div>
+                        <div class="calendar-day-header">W</div>
+                        <div class="calendar-day-header">T</div>
+                        <div class="calendar-day-header">F</div>
+                        <div class="calendar-day-header">S</div>
+                        
+                        <!-- Days -->
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day"></div>
+                        <div class="calendar-day">1</div>
+                        <div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div>
+                        <div class="calendar-day today">8</div>
+                        <div class="calendar-day">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day">14</div>
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-day">16</div>
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-day">21</div>
+                        <div class="calendar-day">22</div>
+                        <div class="calendar-day">23</div>
+                        <div class="calendar-day">24</div>
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-day">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day">28</div>
+                        <div class="calendar-day">29</div>
+                    </div>
+                    
+                    <!-- Streak Stats -->
+                    <div class="streak-stats">
+                        <div class="streak-item">
+                            <div class="streak-icon">🔥</div>
+                            <div class="streak-info">
+                                <p class="streak-value">0 <span class="streak-label">days</span></p>
+                                <p class="streak-title">Current Streak</p>
+                            </div>
+                        </div>
+                        <div class="streak-item">
+                            <div class="streak-icon">🏆</div>
+                            <div class="streak-info">
+                                <p class="streak-value">0 <span class="streak-label">days</span></p>
+                                <p class="streak-title">Best Streak</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="streak-tip">Solve one problem a day to keep your streak!</p>
+                </div>
+
+                <!-- Time Stats Widget -->
+                <div class="time-stats-widget">
+                    <div class="widget-header">
+                        <div class="widget-icon">⏱️</div>
+                        <h3>Time Stats</h3>
+                    </div>
+                    <div class="time-stats-content">
+                        <div class="time-stat-item">
+                            <div class="stat-icon">📊</div>
+                            <div class="stat-details">
+                                <p class="stat-value" id="avgTime">--</p>
+                                <p class="stat-label-small">Average Time</p>
+                            </div>
+                        </div>
+                        <div class="time-stat-item">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-details">
+                                <p class="stat-value" id="fastestTime">--</p>
+                                <p class="stat-label-small">Fastest Solve</p>
+                            </div>
+                        </div>
+                        <div class="time-stat-item">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-details">
+                                <p class="stat-value" id="totalProblems">0</p>
+                                <p class="stat-label-small">Timed Problems</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="widget-tip">💡 Click problem title to start timer</p>
+                </div>
+
+                <!-- Weekly Progress Widget -->
+                <div class="weekly-progress-widget">
+                    <div class="widget-header">
+                        <div class="widget-icon">📈</div>
+                        <h3>Weekly Progress</h3>
+                    </div>
+                    <div class="weekly-bars">
+                        <div class="day-bar">
+                            <div class="bar-fill" style="height: 0%"></div>
+                            <p class="day-label-small">Mon</p>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-fill" style="height: 0%"></div>
+                            <p class="day-label-small">Tue</p>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-fill" style="height: 0%"></div>
+                            <p class="day-label-small">Wed</p>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-fill" style="height: 0%"></div>
+                            <p class="day-label-small">Thu</p>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-fill" style="height: 0%"></div>
+                            <p class="day-label-small">Fri</p>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-fill" style="height: 0%"></div>
+                            <p class="day-label-small">Sat</p>
+                        </div>
+                        <div class="day-bar">
+                            <div class="bar-fill" style="height: 0%"></div>
+                            <p class="day-label-small">Sun</p>
+                        </div>
+                    </div>
+                    <p class="widget-tip" id="weeklyMessage">Keep coding! 💪</p>
+                </div>
+
+                <!-- Ranking Section -->
+                <div class="ranking-widget">
+                    <div class="ranking-header">
+                        <div class="ranking-icon">📊</div>
+                        <p>Sign in to see your ranking</p>
+                    </div>
+                </div>
+            </div><!-- End skills-sidebar -->
+        </div><!-- End container -->
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Learn</h3>
+                <ul>
+                    <li><a href="roadmap.html">Study Plans</a></li>
+                    <li><a href="problems.html">AuthLessX 150</a></li>
+                    <li><a href="problems.html">AuthLessX 250</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="mock-interview.html">Mock Interviews</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 AuthLessX. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/auth.js"></script>
+    <script src="js/core-skills.js"></script>
+</body>
+</html>

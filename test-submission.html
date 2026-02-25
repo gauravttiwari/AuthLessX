@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Submission</title>
+</head>
+<body>
+    <h1>Test Code Submission</h1>
+    <button onclick="testSubmit()">Test Submit</button>
+    <pre id="result"></pre>
+
+    <script>
+        async function testSubmit() {
+            const resultEl = document.getElementById('result');
+            resultEl.textContent = 'Testing...';
+            
+            try {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    resultEl.textContent = 'ERROR: No auth token found. Please login first.';
+                    return;
+                }
+                
+                resultEl.textContent = 'Token found: ' + token.substring(0, 20) + '...\n\n';
+                resultEl.textContent += 'Sending request...\n';
+                
+                const response = await fetch('http://localhost:5000/api/coding/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        questionId: 'two-sum',
+                        language: 'python',
+                        code: 'def twoSum(nums, target):\n    return [0, 1]',
+                        timeTaken: 60
+                    })
+                });
+                
+                resultEl.textContent += 'Response status: ' + response.status + '\n';
+                resultEl.textContent += 'Response ok: ' + response.ok + '\n\n';
+                
+                const data = await response.json();
+                resultEl.textContent += 'Response data:\n' + JSON.stringify(data, null, 2);
+                
+            } catch (error) {
+                resultEl.textContent += '\n\nERROR: ' + error.message;
+                console.error('Full error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

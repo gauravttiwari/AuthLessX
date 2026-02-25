@@ -5,18 +5,8 @@ const Question = require('../models/Question');
 const CodingAttempt = require('../models/CodingAttempt');
 const { authenticateToken } = require('../middleware/auth');
 
-// Judge0 API Configuration (Free tier)
-const JUDGE0_API_URL = 'https://judge0-ce.p.rapidapi.com';
-const JUDGE0_API_KEY = process.env.JUDGE0_API_KEY || 'your_rapidapi_key_here';
-
-// Language ID mapping for Judge0
-const LANGUAGE_IDS = {
-    c: 50,          // C (GCC 9.2.0)
-    cpp: 54,        // C++ (GCC 9.2.0)
-    java: 62,       // Java (OpenJDK 13.0.1)
-    python: 71,     // Python (3.8.1)
-    javascript: 63  // JavaScript (Node.js 12.14.0)
-};
+// Supported languages for Piston API
+const SUPPORTED_LANGUAGES = ['python', 'javascript', 'java', 'cpp', 'c'];
 
 /**
  * GET /api/coding/categories
@@ -116,32 +106,41 @@ router.get('/questions/:type', authenticateToken, async (req, res) => {
  */
 router.post('/submit', authenticateToken, async (req, res) => {
     try {
+        console.log('📥 Received submission request');
+        console.log('Body:', { questionId: req.body.questionId, language: req.body.language, codeLength: req.body.code?.length, timeTaken: req.body.timeTaken });
+        
         const { questionId, language, code, timeTaken } = req.body;
         const userId = req.user.userId;
 
         // Validation
         if (!questionId || !language || !code || timeTaken === undefined) {
+            console.log('❌ Validation failed:', { questionId: !!questionId, language: !!language, code: !!code, timeTaken: timeTaken !== undefined });
             return res.status(400).json({
                 success: false,
                 message: 'Question ID, language, code, and time taken are required'
             });
         }
 
-        if (!LANGUAGE_IDS[language]) {
+        if (!SUPPORTED_LANGUAGES.includes(language)) {
+            console.log('❌ Unsupported language:', language);
             return res.status(400).json({
                 success: false,
-                message: 'Unsupported language'
+                message: `Unsupported language: ${language}. Supported: ${SUPPORTED_LANGUAGES.join(', ')}`
             });
         }
 
         // Get question with test cases
         const question = await Question.findOne({ questionId });
         if (!question) {
+            console.log('❌ Question not found:', questionId);
             return res.status(404).json({
                 success: false,
                 message: 'Question not found'
             });
         }
+
+        console.log('✓ Question found:', question.title);
+        console.log('✓ Test cases:', question.testCases.length);
 
         // Check time limit
         if (timeTaken > question.timeLimit * 60) {
@@ -175,11 +174,15 @@ router.post('/submit', authenticateToken, async (req, res) => {
         }
 
         // Execute code against test cases
+        console.log('🚀 Executing code...');
+        console.log('Function name:', question.functionName || 'solution');
         const results = await executeCodeWithTestCases(
             code,
             language,
-            question.testCases
+            question.testCases,
+            question.functionName || 'solution'
         );
+        console.log('✓ Execution complete, results:', results.length);
 
         // Calculate score
         const testCasesPassed = results.filter(r => r.passed).length;
@@ -252,6 +255,8 @@ router.post('/submit', authenticateToken, async (req, res) => {
         });
 
     } catch (error) {
+        console.error('❌ Submit error:', error);
+        console.error('Stack:', error.stack);
         res.status(500).json({
             success: false,
             message: 'Failed to submit code',
@@ -262,22 +267,27 @@ router.post('/submit', authenticateToken, async (req, res) => {
 
 /**
  * Helper function to execute code with test cases
- * Uses Judge0 API or fallback to eval for simple cases
+ * Uses Judge0 API for safe code execution
  */
-async function executeCodeWithTestCases(code, language, testCases) {
+async function executeCodeWithTestCases(code, language, testCases, functionName = 'solution') {
     const results = [];
 
     for (const testCase of testCases) {
         try {
-            // For demo purposes, using simple evaluation
-            // In production, integrate with Judge0 API
-            const result = await executeCode(code, language, testCase.input);
+            const result = await executeCode(code, language, testCase.input, functionName);
+            
+            // Clean and normalize outputs
+            const expectedOutput = normalizeOutput(testCase.expectedOutput);
+            const actualOutput = normalizeOutput(result.output);
+            
+            // Check if outputs match
+            const passed = actualOutput === expectedOutput;
             
             results.push({
                 input: testCase.input,
-                expectedOutput: testCase.expectedOutput.trim(),
-                actualOutput: result.output.trim(),
-                passed: result.output.trim() === testCase.expectedOutput.trim(),
+                expectedOutput: testCase.expectedOutput,
+                actualOutput: result.output,
+                passed: passed,
                 error: result.error
             });
         } catch (error) {
@@ -295,87 +305,253 @@ async function executeCodeWithTestCases(code, language, testCases) {
 }
 
 /**
- * Execute code using Judge0 API (or local execution for demo)
+ * Normalize output for comparison
+ * Removes extra whitespace, trailing newlines, handles Python/JS differences
  */
-async function executeCode(code, language, input) {
-    // For demo: Simple JavaScript execution
-    if (language === 'javascript') {
-        try {
-            // This is unsafe in production - use Judge0 API instead
-            const capturedOutput = [];
-            const mockConsole = {
-                log: (...args) => capturedOutput.push(args.join(' '))
-            };
-            
-            const wrappedCode = `
-                const console = mockConsole;
-                ${code}
-            `;
-            
-            const func = new Function('mockConsole', wrappedCode);
-            func(mockConsole);
-            
-            return {
-                output: capturedOutput.join('\n'),
-                error: null
-            };
-        } catch (error) {
+function normalizeOutput(output) {
+    if (!output) return '';
+    
+    return output
+        .toString()
+        .trim()
+        .replace(/\r\n/g, '\n')      // Normalize line endings
+        .replace(/\s+$/gm, '')       // Remove trailing whitespace from each line
+        .replace(/^\s+/gm, '')       // Remove leading whitespace from each line
+        .replace(/\n+/g, '\n')       // Normalize multiple newlines to single
+        .replace(/,\s+/g, ',')       // Remove spaces after commas for JSON arrays
+        .replace(/\[\s+/g, '[')      // Remove spaces after opening brackets
+        .replace(/\s+\]/g, ']')      // Remove spaces before closing brackets
+        .replace(/\{\s+/g, '{')      // Remove spaces after opening braces
+        .replace(/\s+\}/g, '}')      // Remove spaces before closing braces
+        .replace(/:\s+/g, ':')       // Remove spaces after colons in JSON
+        .replace(/\bTrue\b/g, 'true')   // Python True → JavaScript true
+        .replace(/\bFalse\b/g, 'false') // Python False → JavaScript false
+        .replace(/\bNone\b/g, 'null')   // Python None → JavaScript null
+        .replace(/\s+/g, ' ')        // Normalize multiple spaces to single
+        .toLowerCase();              // Case-insensitive comparison
+}
+
+/**
+ * Execute code using Judge0 CE API (Free Code Execution Service)
+ * Supports: Python, JavaScript, Java, C, C++, and 70+ languages
+ */
+async function executeCode(code, language, input, functionName = 'solution') {
+    const JUDGE0_API_URL = 'https://ce.judge0.com';
+    
+    // Language ID mapping for Judge0
+    const languageIds = {
+        'python': 71,      // Python 3.8.1 
+        'javascript': 63,  // JavaScript (Node.js 12.14.0)
+        'java': 62,        // Java (OpenJDK 13.0.1)
+        'cpp': 54,         // C++ (GCC 9.2.0)
+        'c': 50            // C (GCC 9.2.0)
+    };
+    
+    const languageId = languageIds[language];
+    if (!languageId) {
+        return {
+            output: '',
+            error: `Unsupported language: ${language}`
+        };
+    }
+    
+    // Wrap code to handle input/output properly
+    const wrappedCode = wrapCode(code, language, input, functionName);
+
+    try {
+        console.log(`🔄 Calling Judge0 API for ${language}...`);
+        
+        // Submit code to Judge0 with timeout
+        const submitResponse = await axios.post(`${JUDGE0_API_URL}/submissions?base64_encoded=false&wait=true`, {
+            source_code: wrappedCode,
+            language_id: languageId,
+            stdin: '',
+            expected_output: null
+        }, {
+            timeout: 30000, // 30 seconds timeout
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = submitResponse.data;
+        console.log(`✅ Judge0 Response - Status: ${result.status.id} (${result.status.description})`);
+
+        // Check compilation error
+        if (result.status.id === 6) { // Compilation Error
             return {
                 output: '',
-                error: `Runtime Error: ${error.message}`
+                error: `Compilation Error: ${result.compile_output || 'Unknown compilation error'}`
             };
         }
-    }
 
-    // For other languages, integrate Judge0 API here
-    // Example Judge0 integration (commented for now):
-    /*
-    const submission = await axios.post(
-        `${JUDGE0_API_URL}/submissions`,
-        {
-            source_code: Buffer.from(code).toString('base64'),
-            language_id: LANGUAGE_IDS[language],
-            stdin: Buffer.from(input).toString('base64')
-        },
-        {
-            headers: {
-                'X-RapidAPI-Key': JUDGE0_API_KEY,
-                'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-            }
+        // Check runtime error
+        if (result.status.id === 11 || result.status.id === 12) { // Runtime Error
+            return {
+                output: result.stdout || '',
+                error: `Runtime Error: ${result.stderr || 'Process exited with error'}`
+            };
         }
-    );
 
-    // Poll for result
-    const token = submission.data.token;
-    let result;
-    for (let i = 0; i < 10; i++) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const response = await axios.get(
-            `${JUDGE0_API_URL}/submissions/${token}`,
-            {
-                headers: {
-                    'X-RapidAPI-Key': JUDGE0_API_KEY,
-                    'X-RapidAPI-Host': 'judge0-ce.p.rapidapi.com'
-                }
-            }
-        );
+        // Check Time Limit Exceeded
+        if (result.status.id === 5) {
+            return {
+                output: result.stdout || '',
+                error: 'Time Limit Exceeded'
+            };
+        }
+
+        // Success (status.id === 3)
+        return {
+            output: result.stdout || '',
+            error: result.stderr || null
+        };
+
+    } catch (error) {
+        console.error('Judge0 API Error:', error.response?.data || error.message);
         
-        if (response.data.status.id > 2) {
-            result = response.data;
-            break;
+        // Handle specific error types
+        if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+            return {
+                output: '',
+                error: 'Execution Timeout: Code execution took too long (30s limit). Please optimize your code.'
+            };
+        }
+        
+        if (error.response?.status === 429) {
+            return {
+                output: '',
+                error: 'Rate Limit: Too many requests. Please wait a moment and try again.'
+            };
+        }
+        
+        return {
+            output: '',
+            error: `Execution Error: ${error.response?.data?.message || error.message}`
+        };
+    }
+}
+
+/**
+ * Wrap user code to handle input/output dynamically
+ */
+function wrapCode(code, language, input, functionName = 'solution') {
+    if (language === 'python') {
+        // Parse input lines
+        return `
+import json
+import sys
+
+${code}
+
+# Parse input and call function dynamically
+try:
+    input_lines = """${input.replace(/"/g, '\\"')}""".strip().split('\\n')
+    
+    # Parse parameters
+    params = []
+    for line in input_lines:
+        # Check if line exists (not None), even if it's empty after strip
+        if line is not None:
+            stripped_line = line.strip()
+            # If line is empty or just whitespace, treat as empty string parameter
+            if not stripped_line:
+                params.append(line)  # Keep original (with spaces) for string inputs
+            else:
+                try:
+                    # Try to parse as JSON
+                    if stripped_line.startswith('[') or stripped_line.startswith('{'):
+                        params.append(json.loads(stripped_line))
+                    elif stripped_line.lower() == 'true':
+                        params.append(True)
+                    elif stripped_line.lower() == 'false':
+                        params.append(False)
+                    elif stripped_line.isdigit() or (stripped_line.startswith('-') and stripped_line[1:].isdigit()):
+                        params.append(int(stripped_line))
+                    else:
+                        # Try as number
+                        try:
+                            params.append(float(stripped_line))
+                        except:
+                            # Keep as string
+                            params.append(line)
+                except:
+                    params.append(line)
+    
+    # Call the function with parsed parameters
+    if '${functionName}' in dir():
+        result = ${functionName}(*params)
+    else:
+        result = None
+        print("Function ${functionName} not found", file=sys.stderr)
+    
+    # Print result as JSON without spaces (compact format)
+    if result is not None:
+        print(json.dumps(result, separators=(',', ':')))
+except Exception as e:
+    print(f"Error: {e}", file=sys.stderr)
+    import traceback
+    traceback.print_exc()
+`;
+    } else if (language === 'javascript') {
+        return `
+${code}
+
+// Parse input and call function
+try {
+    const inputLines = \`${input.replace(/`/g, '\\`')}\`.trim().split('\\n');
+    
+    // Parse parameters
+    const params = [];
+    for (const line of inputLines) {
+        if (line.trim()) {
+            try {
+                if (line.startsWith('[') || line.startsWith('{')) {
+                    params.push(JSON.parse(line));
+                } else if (line.toLowerCase() === 'true') {
+                    params.push(true);
+                } else if (line.toLowerCase() === 'false') {
+                    params.push(false);
+                } else if (!isNaN(line)) {
+                    params.push(Number(line));
+                } else {
+                    params.push(line);
+                }
+            } catch {
+                params.push(line);
+            }
         }
     }
+    
+    // Call function
+    const result = typeof ${functionName} !== 'undefined' ? ${functionName}(...params) : null;
+    
+    if (result !== null && result !== undefined) {
+        // Print compact JSON without spaces
+        console.log(JSON.stringify(result).replace(/,\s+/g, ',').replace(/:\s+/g, ':'));
+    }
+} catch (e) {
+    console.error('Error:', e.message);
+}
+`;
+    }
+    
+    // For other languages, return code as-is for now
+    return code;
+}
 
-    return {
-        output: result.stdout ? Buffer.from(result.stdout, 'base64').toString() : '',
-        error: result.stderr ? Buffer.from(result.stderr, 'base64').toString() : null
+/**
+ * Get proper filename for each language
+ */
+function getFileName(language) {
+    const fileNames = {
+        'python': 'main.py',
+        'javascript': 'main.js',
+        'java': 'Main.java',
+        'cpp': 'main.cpp',
+        'c': 'main.c'
     };
-    */
-
-    return {
-        output: 'Judge0 API integration pending',
-        error: 'Please integrate Judge0 API for ' + language
-    };
+    return fileNames[language] || 'main.txt';
 }
 
 /**

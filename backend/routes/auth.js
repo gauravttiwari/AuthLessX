@@ -11,69 +11,30 @@ const { generateToken } = require('../utils/jwt');
  */
 router.post('/signup', async (req, res) => {
     try {
-        const { name, email, publicKey, deviceInfo } = req.body;
+        const { name, email, publicKey } = req.body;
 
         // Validation
-        if (!email || !publicKey) {
+        if (!name || !email || !publicKey) {
             return res.status(400).json({
                 success: false,
-                message: 'Email and public key are required'
+                message: 'Name, email, and public key are required'
             });
         }
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            // User exists - add new device key
-            const keyExists = existingUser.publicKeys.some(k => k.key === publicKey);
-            
-            if (keyExists) {
-                return res.status(409).json({
-                    success: false,
-                    message: 'This device is already registered'
-                });
-            }
-
-            // Add new device key
-            existingUser.publicKeys.push({
-                key: publicKey,
-                deviceInfo: deviceInfo || 'Unknown Device',
-                createdAt: new Date(),
-                lastUsed: new Date()
-            });
-
-            await existingUser.save();
-
-            return res.status(200).json({
-                success: true,
-                message: 'New device registered successfully',
-                data: {
-                    userId: existingUser._id,
-                    name: existingUser.name,
-                    email: existingUser.email,
-                    isNewUser: false,
-                    deviceCount: existingUser.publicKeys.length
-                }
+            return res.status(409).json({
+                success: false,
+                message: 'User with this email already exists'
             });
         }
 
         // Create new user
-        if (!name) {
-            return res.status(400).json({
-                success: false,
-                message: 'Name is required for new user registration'
-            });
-        }
-
         const user = new User({
             name,
             email,
-            publicKeys: [{
-                key: publicKey,
-                deviceInfo: deviceInfo || 'Unknown Device',
-                createdAt: new Date(),
-                lastUsed: new Date()
-            }]
+            publicKey
         });
 
         await user.save();
@@ -84,13 +45,12 @@ router.post('/signup', async (req, res) => {
             data: {
                 userId: user._id,
                 name: user.name,
-                email: user.email,
-                isNewUser: true,
-                deviceCount: 1
+                email: user.email
             }
         });
 
     } catch (error) {
+        console.error('Signup error:', error);
         res.status(500).json({
             success: false,
             message: 'Registration failed',
@@ -139,6 +99,7 @@ router.post('/login/challenge', async (req, res) => {
         });
 
     } catch (error) {
+        console.error('Challenge generation error:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to generate challenge',
@@ -171,7 +132,7 @@ router.post('/login/verify', async (req, res) => {
             });
         }
 
-        // Get user
+        // Get user and public key
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(404).json({
@@ -180,27 +141,19 @@ router.post('/login/verify', async (req, res) => {
             });
         }
 
-        // Try to verify signature with all registered device keys
-        let isValid = false;
-        let matchedKeyIndex = -1;
-
-        for (let i = 0; i < user.publicKeys.length; i++) {
-            if (verifySignature(challengeDoc.challenge, signature, user.publicKeys[i].key)) {
-                isValid = true;
-                matchedKeyIndex = i;
-                break;
-            }
-        }
+        // Verify signature
+        const isValid = verifySignature(
+            challengeDoc.challenge,
+            signature,
+            user.publicKey
+        );
 
         if (!isValid) {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid signature. This device is not registered.'
+                message: 'Invalid signature'
             });
         }
-
-        // Update last used time for the matched key
-        user.publicKeys[matchedKeyIndex].lastUsed = new Date();
 
         // Delete used challenge
         await Challenge.findByIdAndDelete(challengeDoc._id);
@@ -220,13 +173,13 @@ router.post('/login/verify', async (req, res) => {
                 user: {
                     userId: user._id,
                     name: user.name,
-                    email: user.email,
-                    deviceCount: user.publicKeys.length
+                    email: user.email
                 }
             }
         });
 
     } catch (error) {
+        console.error('Login verification error:', error);
         res.status(500).json({
             success: false,
             message: 'Authentication failed',
@@ -246,100 +199,12 @@ router.get('/check-email/:email', async (req, res) => {
         
         res.json({
             success: true,
-            exists: !!user,
-            deviceCount: user ? user.publicKeys.length : 0
+            exists: !!user
         });
     } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Failed to check email'
-        });
-    }
-});
-
-/**
- * GET /api/auth/devices
- * Get list of registered devices for the authenticated user
- */
-const { authenticateToken } = require('../middleware/auth');
-
-router.get('/devices', authenticateToken, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.userId);
-        
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
-        }
-
-        const devices = user.publicKeys.map((key, index) => ({
-            id: index,
-            deviceInfo: key.deviceInfo,
-            createdAt: key.createdAt,
-            lastUsed: key.lastUsed
-        }));
-
-        res.json({
-            success: true,
-            data: {
-                totalDevices: devices.length,
-                devices
-            }
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Failed to fetch devices'
-        });
-    }
-});
-
-/**
- * DELETE /api/auth/devices/:deviceId
- * Remove a registered device
- */
-router.delete('/devices/:deviceId', authenticateToken, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.userId);
-        const deviceId = parseInt(req.params.deviceId);
-
-        if (!user) {
-            return res.status(404).json({
-                success: false,
-                message: 'User not found'
-            });
-        }
-
-        if (user.publicKeys.length === 1) {
-            return res.status(400).json({
-                success: false,
-                message: 'Cannot remove the last device. At least one device must remain.'
-            });
-        }
-
-        if (deviceId < 0 || deviceId >= user.publicKeys.length) {
-            return res.status(404).json({
-                success: false,
-                message: 'Device not found'
-            });
-        }
-
-        user.publicKeys.splice(deviceId, 1);
-        await user.save();
-
-        res.json({
-            success: true,
-            message: 'Device removed successfully',
-            data: {
-                remainingDevices: user.publicKeys.length
-            }
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Failed to remove device'
         });
     }
 });

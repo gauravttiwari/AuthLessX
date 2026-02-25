@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuthLessX - Practice Coding Interviews the Right Way</title>
+    <link rel="stylesheet" href="css/style-new.css">
+</head>
+<body>
+    <script src="js/navbar-auth.js"></script>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 onclick="window.location.href='home.html'" style="cursor: pointer;">🔐 AuthLessX</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="problems.html">Practice</a>
+                <a href="courses.html">Courses</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="core-skills.html">Core Skills</a>
+                <a href="#" class="premium-link">Pro</a>
+            </div>
+            <div class="nav-auth">
+                <button onclick="window.location.href='login.html?mode=signin'" class="btn-secondary">Sign In</button>
+                <button onclick="window.location.href='login.html?mode=signup'" class="btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Practice Coding Interviews<br>the Right Way</h1>
+            <p class="hero-subtitle">Tech interview roadmaps trusted by engineers preparing for top companies</p>
+            
+            <div class="hero-cta">
+                <button onclick="window.location.href='problems.html'" class="btn-primary-large">
+                    Start Practicing Free
+                </button>
+                <button onclick="window.location.href='courses.html'" class="btn-secondary-large">
+                    Upgrade for Video Solutions
+                </button>
+            </div>
+
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">100K+</span>
+                    <span class="stat-label">Engineers Prepared</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Practice Problems</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">100+</span>
+                    <span class="stat-label">Video Explanations</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Topics Grid -->
+    <section class="topics-section">
+        <div class="container">
+            <h2 class="section-title">Master Every Topic</h2>
+            <p class="section-subtitle">Practice problems organized by patterns you'll see in real interviews</p>
+            
+            <div class="topics-grid">
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=arrays-hashing'">
+                    <div class="topic-icon">📊</div>
+                    <h3>Arrays & Hashing</h3>
+                    <p class="topic-count">45 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">15</span>
+                        <span class="medium">20</span>
+                        <span class="hard">10</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=two-pointers'">
+                    <div class="topic-icon">👉</div>
+                    <h3>Two Pointers</h3>
+                    <p class="topic-count">28 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">10</span>
+                        <span class="medium">14</span>
+                        <span class="hard">4</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=sliding-window'">
+                    <div class="topic-icon">🪟</div>
+                    <h3>Sliding Window</h3>
+                    <p class="topic-count">22 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">8</span>
+                        <span class="medium">10</span>
+                        <span class="hard">4</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=stack'">
+                    <div class="topic-icon">📚</div>
+                    <h3>Stack</h3>
+                    <p class="topic-count">24 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">9</span>
+                        <span class="medium">12</span>
+                        <span class="hard">3</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=binary-search'">
+                    <div class="topic-icon">🔍</div>
+                    <h3>Binary Search</h3>
+                    <p class="topic-count">18 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">6</span>
+                        <span class="medium">9</span>
+                        <span class="hard">3</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=linked-list'">
+                    <div class="topic-icon">⛓️</div>
+                    <h3>Linked List</h3>
+                    <p class="topic-count">19 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">7</span>
+                        <span class="medium">9</span>
+                        <span class="hard">3</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=trees'">
+                    <div class="topic-icon">🌳</div>
+                    <h3>Trees</h3>
+                    <p class="topic-count">35 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">12</span>
+                        <span class="medium">17</span>
+                        <span class="hard">6</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=tries'">
+                    <div class="topic-icon">🌿</div>
+                    <h3>Tries</h3>
+                    <p class="topic-count">8 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">2</span>
+                        <span class="medium">4</span>
+                        <span class="hard">2</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=heap'">
+                    <div class="topic-icon">⛰️</div>
+                    <h3>Heap / Priority Queue</h3>
+                    <p class="topic-count">15 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">3</span>
+                        <span class="medium">8</span>
+                        <span class="hard">4</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=backtracking'">
+                    <div class="topic-icon">↩️</div>
+                    <h3>Backtracking</h3>
+                    <p class="topic-count">14 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">3</span>
+                        <span class="medium">7</span>
+                        <span class="hard">4</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=graphs'">
+                    <div class="topic-icon">🕸️</div>
+                    <h3>Graphs</h3>
+                    <p class="topic-count">32 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">8</span>
+                        <span class="medium">17</span>
+                        <span class="hard">7</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=1d-dp'">
+                    <div class="topic-icon">📈</div>
+                    <h3>1-D Dynamic Programming</h3>
+                    <p class="topic-count">20 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">5</span>
+                        <span class="medium">11</span>
+                        <span class="hard">4</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=2d-dp'">
+                    <div class="topic-icon">🎯</div>
+                    <h3>2-D Dynamic Programming</h3>
+                    <p class="topic-count">18 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">2</span>
+                        <span class="medium">10</span>
+                        <span class="hard">6</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=greedy'">
+                    <div class="topic-icon">💰</div>
+                    <h3>Greedy</h3>
+                    <p class="topic-count">12 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">4</span>
+                        <span class="medium">6</span>
+                        <span class="hard">2</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=intervals'">
+                    <div class="topic-icon">⏱️</div>
+                    <h3>Intervals</h3>
+                    <p class="topic-count">10 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">3</span>
+                        <span class="medium">5</span>
+                        <span class="hard">2</span>
+                    </div>
+                </div>
+
+                <div class="topic-card" onclick="window.location.href='problems.html?topic=bit-manipulation'">
+                    <div class="topic-icon">🔢</div>
+                    <h3>Bit Manipulation</h3>
+                    <p class="topic-count">9 problems</p>
+                    <div class="topic-difficulty">
+                        <span class="easy">3</span>
+                        <span class="medium">4</span>
+                        <span class="hard">2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Start Practicing For Free</h2>
+            <p class="section-subtitle">The best resources for coding interviews. Period.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Organized Study Plans</h3>
+                    <p>Blind 75, AuthLessX 150, AuthLessX 250</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎥</div>
+                    <h3>Video Explanations</h3>
+                    <p>Detailed solutions for every problem (Premium)</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Track Your Progress</h3>
+                    <p>Stay motivated with progress tracking</p>
+                </div>
+            </div>
+
+            <div class="cta-section">
+                <button onclick="window.location.href='problems.html'" class="btn-primary-large">
+                    Start Practicing Now
+                </button>
+                <p class="cta-note">Free forever. No credit card required.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AuthLessX</h3>
+                    <p>A modern coding practice platform with passwordless authentication and mock interviews.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="problems.html">Practice</a></li>
+                        <li><a href="courses.html">Courses</a></li>
+                        <li><a href="roadmap.html">Roadmap</a></li>
+                        <li><a href="#">Pro</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="#">Blind 75</a></li>
+                        <li><a href="#">AuthLessX 150</a></li>
+                        <li><a href="#">Mock Interviews</a></li>
+                        <li><a href="#">Discord</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 AuthLessX. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/home.js"></script>
+</body>
+</html>

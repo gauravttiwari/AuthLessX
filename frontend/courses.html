@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - AuthLessX</title>
+    <link rel="stylesheet" href="css/style-new.css">
+</head>
+<body>
+    <script src="js/navbar-auth.js"></script>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 onclick="window.location.href='home.html'" style="cursor: pointer;">🔐 AuthLessX</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="problems.html">Practice</a>
+                <a href="courses.html" class="active">Courses</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="core-skills.html">Core Skills</a>
+                <a href="#" class="premium-link">Pro</a>
+            </div>
+            <div class="nav-auth">
+                <button onclick="window.location.href='login.html?mode=signin'" class="btn-secondary">Sign In</button>
+                <button onclick="window.location.href='login.html?mode=signup'" class="btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="courses-container">
+        <div class="courses-hero">
+            <h1>Master Coding Interviews</h1>
+            <p>Structured courses with video explanations to take you from beginner to advanced</p>
+            <div class="premium-badge-large">👑 Premium Content</div>
+        </div>
+
+        <!-- Data Structures & Algorithms -->
+        <section class="course-category">
+            <h2>📊 Data Structures & Algorithms</h2>
+            <p class="category-desc">Follow a structured path to learn all core DSA concepts. Perfect for interview prep.</p>
+            
+            <div class="courses-grid">
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🎯</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Algorithms & Data Structures for Beginners</h3>
+                        <p>Learn the foundations of coding interviews</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 25 hours</span>
+                            <span class="course-difficulty medium">Medium</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 50 lessons</span>
+                            <span>⭐ 4.9 (2.5k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('dsa-beginners')">View Course</button>
+                    </div>
+                </div>
+
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🚀</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Advanced Algorithms</h3>
+                        <p>Learn every algorithm you would ever need</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 25 hours</span>
+                            <span class="course-difficulty hard">Hard</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 45 lessons</span>
+                            <span>⭐ 4.8 (1.8k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('advanced-algo')">View Course</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Design -->
+        <section class="course-category">
+            <h2>🏗️ System Design</h2>
+            <p class="category-desc">Brush up on core system design concepts for designing robust backend systems.</p>
+            
+            <div class="courses-grid">
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🏛️</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>System Design for Beginners</h3>
+                        <p>Learn the foundations of system design interviews</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 10 hours</span>
+                            <span class="course-difficulty medium">Medium</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 25 lessons</span>
+                            <span>⭐ 4.9 (3.2k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('system-design-beginners')">View Course</button>
+                    </div>
+                </div>
+
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">⚡</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>System Design Interview</h3>
+                        <p>Learn common system design interview questions</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 10 hours</span>
+                            <span class="course-difficulty medium">Medium</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 20 lessons</span>
+                            <span>⭐ 4.8 (2.9k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('system-design-interview')">View Course</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Python -->
+        <section class="course-category">
+            <h2>🐍 Python</h2>
+            <p class="category-desc">Learn the Python programming language with interactive coding lessons.</p>
+            
+            <div class="courses-grid">
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🎓</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Python for Beginners</h3>
+                        <p>Learn the Python programming language from scratch</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 12 hours</span>
+                            <span class="course-difficulty easy">Easy</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 35 lessons</span>
+                            <span>⭐ 4.9 (4.5k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('python-beginners')">View Course</button>
+                    </div>
+                </div>
+
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">💻</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Python for Coding Interviews</h3>
+                        <p>Learn effective Python techniques for interviews</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 8 hours</span>
+                            <span class="course-difficulty easy">Easy</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 20 lessons</span>
+                            <span>⭐ 4.9 (3.8k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('python-interviews')">View Course</button>
+                    </div>
+                </div>
+
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🏗️</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Python OOP</h3>
+                        <p>Learn object-oriented programming in Python</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 8 hours</span>
+                            <span class="course-difficulty easy">Easy</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 18 lessons</span>
+                            <span>⭐ 4.8 (2.1k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('python-oop')">View Course</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Full Stack Development -->
+        <section class="course-category">
+            <h2>🌐 Full Stack Development</h2>
+            <p class="category-desc">Choose from a variety of skills involved in full stack development.</p>
+            
+            <div class="courses-grid">
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🗄️</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>SQL for Beginners</h3>
+                        <p>Learn PostgreSQL with interactive coding lessons</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 10 hours</span>
+                            <span class="course-difficulty easy">Easy</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 30 lessons</span>
+                            <span>⭐ 4.8 (2.8k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('sql-beginners')">View Course</button>
+                    </div>
+                </div>
+
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🎨</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Full Stack Development</h3>
+                        <p>Learn how to build an intermediate full stack app</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 20 hours</span>
+                            <span class="course-difficulty medium">Medium</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 40 lessons</span>
+                            <span>⭐ 4.9 (3.5k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('fullstack')">View Course</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Object Oriented Design -->
+        <section class="course-category">
+            <h2>🎯 Object Oriented Design</h2>
+            <p class="category-desc">Dive deeper into OOP by focusing on design patterns and principles.</p>
+            
+            <div class="courses-grid">
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">📐</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Object Oriented Design Interviews</h3>
+                        <p>Learn OO design interview questions</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 8 hours</span>
+                            <span class="course-difficulty easy">Easy</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 15 lessons</span>
+                            <span>⭐ 4.7 (1.9k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('ood-interviews')">View Course</button>
+                    </div>
+                </div>
+
+                <div class="course-card premium-card">
+                    <div class="course-thumbnail">
+                        <div class="premium-badge">👑 PREMIUM</div>
+                        <div class="course-icon">🔧</div>
+                    </div>
+                    <div class="course-info">
+                        <h3>Design Patterns</h3>
+                        <p>Learn & implement common coding design patterns</p>
+                        <div class="course-meta">
+                            <span class="course-duration">⏱️ 8 hours</span>
+                            <span class="course-difficulty easy">Easy</span>
+                        </div>
+                        <div class="course-stats">
+                            <span>📝 18 lessons</span>
+                            <span>⭐ 4.8 (2.4k)</span>
+                        </div>
+                        <button class="btn-course" onclick="showCourse('design-patterns')">View Course</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium CTA -->
+        <section class="premium-cta-section">
+            <div class="premium-cta-card">
+                <h2>🚀 Unlock All Courses</h2>
+                <p>Get access to all premium courses, video solutions, and exclusive content</p>
+                <div class="pricing">
+                    <div class="price">$49<span>/month</span></div>
+                    <div class="price-annual">$399<span>/year (Save 33%)</span></div>
+                </div>
+                <button class="btn-premium-large" onclick="upgradeToPremium()">Upgrade to Premium</button>
+                <ul class="premium-features">
+                    <li>✓ All premium courses</li>
+                    <li>✓ Video solutions for 500+ problems</li>
+                    <li>✓ Structured learning paths</li>
+                    <li>✓ Interview tips & patterns</li>
+                    <li>✓ Priority community support</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        // Check authentication
+        checkAuth();
+    </script>
+    <script src="js/courses.js"></script>
+</body>
+</html>

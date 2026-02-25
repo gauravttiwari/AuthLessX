@@ -25,9 +25,6 @@ const questions = {
         { id: 3, question: "Complete the series: 2, 4, 8, 16, __", options: ["20", "24", "32", "18"], correct: 2 },
         { id: 4, question: "A train travels 60 km in 1 hour. How far will it travel in 3.5 hours?", options: ["180 km", "210 km", "240 km", "200 km"], correct: 1 },
         { id: 5, question: "What is the next number: 1, 1, 2, 3, 5, 8, __?", options: ["11", "13", "15", "10"], correct: 1 }
-    ],
-    coding: [
-        { id: 1, type: 'redirect', message: 'Use /api/coding endpoints for coding questions' }
     ]
 };
 
@@ -39,20 +36,10 @@ router.get('/questions/:category', authenticateToken, (req, res) => {
     try {
         const { category } = req.params;
 
-        // Redirect coding category to dedicated endpoint
-        if (category === 'coding') {
-            return res.status(200).json({
-                success: true,
-                redirect: true,
-                message: 'Please use /api/coding endpoints for coding questions',
-                endpoint: '/api/coding/categories'
-            });
-        }
-
         if (!questions[category]) {
             return res.status(400).json({
                 success: false,
-                message: 'Invalid category. Choose: technical, hr, aptitude, or coding'
+                message: 'Invalid category. Choose: technical, hr, or aptitude'
             });
         }
 
@@ -65,6 +52,7 @@ router.get('/questions/:category', authenticateToken, (req, res) => {
         });
 
     } catch (error) {
+        console.error('Get questions error:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to fetch questions'
@@ -148,6 +136,7 @@ router.post('/submit', authenticateToken, async (req, res) => {
         });
 
     } catch (error) {
+        console.error('Submit interview error:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to submit interview',
@@ -174,6 +163,7 @@ router.get('/history', authenticateToken, async (req, res) => {
         });
 
     } catch (error) {
+        console.error('Get history error:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to fetch interview history'
@@ -224,6 +214,7 @@ router.get('/stats', authenticateToken, async (req, res) => {
         });
 
     } catch (error) {
+        console.error('Get stats error:', error);
         res.status(500).json({
             success: false,
             message: 'Failed to fetch statistics'

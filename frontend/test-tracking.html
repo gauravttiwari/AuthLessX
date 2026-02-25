@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Activity Tracking - AuthLessX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        h1 {
+            color: #ef6c00;
+            margin-bottom: 30px;
+        }
+        button {
+            background: #ef6c00;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #ff7f00;
+        }
+        .success {
+            background: #4caf50;
+        }
+        .danger {
+            background: #f44336;
+        }
+        .info {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        pre {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Activity Tracking Test</h1>
+        
+        <div class="info">
+            <p><strong>Purpose:</strong> Add sample activity data to test the calendar and streak features</p>
+            <p><strong>Storage Keys:</strong></p>
+            <ul>
+                <li>authlessx_daily_activity - Daily problem counts</li>
+                <li>authlessx_problem_time - Problem solve times</li>
+            </ul>
+        </div>
+
+        <h2>Quick Actions</h2>
+        <button onclick="addSampleActivity()">Add Sample Activity (Last 7 Days)</button>
+        <button onclick="addSampleTimes()">Add Sample Times</button>
+        <button onclick="addTodayActivity()">Mark Today Active (1 Problem)</button>
+        <button class="success" onclick="viewData()">View Current Data</button>
+        <button class="danger" onclick="clearAllData()">Clear All Data</button>
+        
+        <div id="output" class="info" style="margin-top: 30px; display: none;">
+            <h3>Current Data:</h3>
+            <pre id="dataDisplay"></pre>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <button onclick="goToCoreSkills()">🎯 Go to Core Skills Page</button>
+        </div>
+    </div>
+
+    <script>
+        // Add sample activity for the last 7 days
+        function addSampleActivity() {
+            const activity = {};
+            const today = new Date();
+            
+            // Add activity for last 7 days with varying problem counts
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                
+                const problemCount = Math.floor(Math.random() * 5) + 1; // 1-5 problems
+                activity[dateStr] = {
+                    problemsSolved: problemCount,
+                    timestamp: date.getTime(),
+                    lastSolved: date.getTime()
+                };
+            }
+            
+            localStorage.setItem('authlessx_daily_activity', JSON.stringify(activity));
+            alert('✅ Sample activity added for last 7 days!\n\nCheck the Core Skills page to see:\n- Calendar with green dots\n- Current streak\n- Best streak\n- Weekly progress bars');
+        }
+
+        // Add sample problem solve times
+        function addSampleTimes() {
+            const times = {
+                "Design Dynamic Array": [
+                    { time: 245000, date: new Date().toISOString() }, // 4m 5s
+                    { time: 180000, date: new Date().toISOString() }  // 3m
+                ],
+                "Design Singly Linked List": [
+                    { time: 420000, date: new Date().toISOString() }, // 7m
+                    { time: 300000, date: new Date().toISOString() }  // 5m
+                ],
+                "Design Doubly Linked List": [
+                    { time: 540000, date: new Date().toISOString() }  // 9m
+                ]
+            };
+            
+            localStorage.setItem('authlessx_problem_time', JSON.stringify(times));
+            alert('✅ Sample times added!\n\nTime Stats will show:\n- Average Time\n- Fastest Solve\n- Total Timed Problems');
+        }
+
+        // Mark today as active
+        function addTodayActivity() {
+            const activity = JSON.parse(localStorage.getItem('authlessx_daily_activity') || '{}');
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (!activity[today]) {
+                activity[today] = {
+                    problemsSolved: 0,
+                    timestamp: Date.now()
+                };
+            }
+            activity[today].problemsSolved++;
+            activity[today].lastSolved = Date.now();
+            
+            localStorage.setItem('authlessx_daily_activity', JSON.stringify(activity));
+            alert(`✅ Today marked active!\n\nProblems solved today: ${activity[today].problemsSolved}`);
+        }
+
+        // View current data
+        function viewData() {
+            const activity = localStorage.getItem('authlessx_daily_activity');
+            const times = localStorage.getItem('authlessx_problem_time');
+            
+            const output = {
+                daily_activity: activity ? JSON.parse(activity) : 'No data',
+                problem_times: times ? JSON.parse(times) : 'No data'
+            };
+            
+            document.getElementById('dataDisplay').textContent = JSON.stringify(output, null, 2);
+            document.getElementById('output').style.display = 'block';
+        }
+
+        // Clear all tracking data
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure you want to clear ALL activity data?\n\nThis will reset:\n- Calendar activity\n- Streaks\n- Problem times\n- Weekly progress')) {
+                localStorage.removeItem('authlessx_daily_activity');
+                localStorage.removeItem('authlessx_problem_time');
+                document.getElementById('output').style.display = 'none';
+                alert('✅ All tracking data cleared!');
+            }
+        }
+
+        // Go to Core Skills page
+        function goToCoreSkills() {
+            window.location.href = 'core-skills.html';
+        }
+    </script>
+</body>
+</html>

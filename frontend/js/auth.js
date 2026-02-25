@@ -148,9 +148,9 @@ async function handleLogin(event) {
             statusDiv.className = 'status-message success';
             statusDiv.textContent = '✅ Login successful! Redirecting...';
 
-            // Redirect to dashboard
+            // Redirect to home page
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'home.html';
             }, 1000);
         } else {
             statusDiv.className = 'status-message error';

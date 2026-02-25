@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem - AuthLessX</title>
+    <link rel="stylesheet" href="css/style-new.css">
+    <!-- Monaco Editor -->
+    <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/editor/editor.main.css">
+</head>
+<body>
+    <script src="js/navbar-auth.js"></script>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1 onclick="window.location.href='home.html'" style="cursor: pointer;">🔐 AuthLessX</h1>
+            </div>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="problems.html">← Back to Problems</a>
+                <a href="courses.html">Courses</a>
+                <a href="roadmap.html">Roadmap</a>
+                <a href="core-skills.html">Core Skills</a>
+                <a href="#" class="premium-link">Pro</a>
+            </div>
+            <div class="nav-auth">
+                <button onclick="window.location.href='login.html?mode=signin'" class="btn-secondary">Sign In</button>
+                <button onclick="window.location.href='login.html?mode=signup'" class="btn-primary">Sign Up</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Split Screen Layout -->
+    <div class="split-container">
+        <!-- LEFT SIDE - Problem Description -->
+        <div class="problem-panel" id="problem-panel">
+            <div class="problem-header">
+                <h1 id="problem-title">Loading...</h1>
+                <div class="problem-meta">
+                    <span class="difficulty-badge" id="difficulty-badge">Medium</span>
+                    <span class="topic-badge" id="topic-badge">Arrays</span>
+                    <span class="acceptance-rate" id="acceptance-rate">45.2%</span>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="problem-tabs">
+                <button class="tab-btn active" onclick="showProblemTab('description')">Description</button>
+                <button class="tab-btn" onclick="showProblemTab('solution')">
+                    Solution
+                    <span class="premium-badge" id="solution-premium">👑</span>
+                </button>
+                <button class="tab-btn" onclick="showProblemTab('submissions')">Submissions</button>
+            </div>
+
+            <!-- Description Tab -->
+            <div class="problem-content active" id="description-tab">
+                <div class="problem-description" id="problem-description">
+                    <p>Loading problem...</p>
+                </div>
+
+                <div class="problem-examples" id="problem-examples">
+                    <!-- Examples will be loaded here -->
+                </div>
+
+                <div class="problem-constraints" id="problem-constraints">
+                    <!-- Constraints will be loaded here -->
+                </div>
+
+                <div class="problem-hints" id="problem-hints">
+                    <!-- Hints will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Solution Tab (Premium) -->
+            <div class="problem-content" id="solution-tab">
+                <div id="solution-content">
+                    <!-- For free users -->
+                    <div class="premium-upsell" id="premium-upsell">
+                        <div class="upsell-icon">👑</div>
+                        <h3>Unlock Video Solution</h3>
+                        <p>Get detailed video explanations, optimized approaches, and interview tips</p>
+                        <button class="btn-premium" onclick="window.location.href='#premium'">Upgrade to Pro</button>
+                    </div>
+
+                    <!-- For premium users -->
+                    <div class="solution-premium" id="solution-premium-content" style="display: none;">
+                        <div class="video-container" id="video-container">
+                            <!-- Video embed will be here -->
+                        </div>
+                        <div class="solution-approach" id="solution-approach">
+                            <!-- Detailed solution -->
+                        </div>
+                        <div class="interview-tips" id="interview-tips">
+                            <!-- Interview tips -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Free Content: Basic Explanation -->
+                <div class="basic-explanation" id="basic-explanation">
+                    <h3>💡 Approach</h3>
+                    <div id="basic-explanation-text"></div>
+                    
+                    <h3>⏱️ Complexity Analysis</h3>
+                    <div class="complexity">
+                        <p><strong>Time Complexity:</strong> <span id="time-complexity"></span></p>
+                        <p><strong>Space Complexity:</strong> <span id="space-complexity"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submissions Tab -->
+            <div class="problem-content" id="submissions-tab">
+                <div class="submissions-list" id="submissions-list">
+                    <p>No submissions yet. Submit your solution to see results here.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resizer -->
+        <div class="resizer" id="resizer"></div>
+
+        <!-- RIGHT SIDE - Code Editor -->
+        <div class="editor-panel" id="editor-panel">
+            <!-- Editor Header -->
+            <div class="editor-header">
+                <div class="editor-controls">
+                    <select id="language-select" onchange="changeLanguage()">
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="c">C</option>
+                    </select>
+                    
+                    <button class="btn-icon" onclick="resetCode()" title="Reset Code">
+                        🔄 Reset
+                    </button>
+                    
+                    <button class="btn-icon" onclick="toggleTheme()" title="Toggle Theme">
+                        🌙 Theme
+                    </button>
+                </div>
+
+                <div class="timer-section">
+                    <span id="timer-display">00:00</span>
+                    <button class="btn-icon" onclick="toggleTimer()" id="timer-btn">
+                        ⏱️ Start Timer
+                    </button>
+                </div>
+            </div>
+
+            <!-- Monaco Editor -->
+            <div id="code-editor" class="code-editor"></div>
+
+            <!-- Test Cases -->
+            <div class="test-cases-section">
+                <div class="test-cases-header">
+                    <h4>Test Cases</h4>
+                    <button class="btn-small" onclick="addCustomTestCase()">+ Add Test Case</button>
+                </div>
+                <div class="test-cases-tabs" id="test-cases-tabs">
+                    <button class="test-case-tab active" onclick="showTestCase(0)">Case 1</button>
+                    <button class="test-case-tab" onclick="showTestCase(1)">Case 2</button>
+                    <button class="test-case-tab" onclick="showTestCase(2)">Case 3</button>
+                </div>
+                <div class="test-case-content" id="test-case-content">
+                    <div class="test-input">
+                        <label>Input:</label>
+                        <textarea id="test-input" rows="3"></textarea>
+                    </div>
+                    <div class="test-output" id="test-output-section" style="display: none;">
+                        <label>Expected Output:</label>
+                        <div id="test-expected"></div>
+                        <label>Your Output:</label>
+                        <div id="test-actual"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="editor-actions">
+                <button class="btn-run" onclick="runCode()">▶ Run Code</button>
+                <button class="btn-submit" onclick="submitCode()">✓ Submit</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section" id="results-section" style="display: none;">
+                <div class="results-header">
+                    <h4 id="results-title">Results</h4>
+                    <button class="btn-close" onclick="closeResults()">✕</button>
+                </div>
+                <div class="results-content" id="results-content">
+                    <!-- Results will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Console Output -->
+    <div class="console-output" id="console-output" style="display: none;">
+        <div class="console-header">
+            <h4>Console</h4>
+            <button onclick="closeConsole()">✕</button>
+        </div>
+        <pre id="console-content"></pre>
+    </div>
+
+    <!-- Monaco Editor Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    <script src="js/problem-detail.js"></script>
+</body>
+</html>

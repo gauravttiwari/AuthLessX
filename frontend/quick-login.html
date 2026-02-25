@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick Login - AuthLessX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #3b82f6;
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #2563eb;
+        }
+        .status {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        pre {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Quick Login for Testing</h1>
+        <p>This tool will help you login and get a valid token for testing code submission.</p>
+        
+        <button onclick="quickLogin()">🚀 Quick Login</button>
+        <button onclick="testSubmission()">🧪 Test Submission</button>
+        <button onclick="clearStorage()">🗑️ Clear Storage</button>
+        
+        <div id="status"></div>
+    </div>
+
+    <script src="js/crypto.js"></script>
+    
+    <script>
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = 'status ' + type;
+            statusDiv.innerHTML = message;
+        }
+
+        async function quickLogin() {
+            try {
+                showStatus('🔄 Generating keys...', 'info');
+                
+                // Generate RSA key pair
+                const { publicKey, privateKey } = await generateRSAKeyPair();
+                
+                showStatus('🔄 Creating account...', 'info');
+                
+                // Register
+                const email = 'quicktest@authlessx.com';
+                const registerResponse = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: 'Quick Test User',
+                        email: email,
+                        publicKey: publicKey
+                    })
+                });
+                
+                const registerData = await registerResponse.json();
+                
+                if (!registerData.success) {
+                    // Try login instead
+                    showStatus('🔄 Account exists, logging in...', 'info');
+                }
+                
+                // Get challenge
+                const challengeResponse = await fetch('http://localhost:5000/api/auth/challenge', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
+                
+                const challengeData = await challengeResponse.json();
+                
+                if (!challengeData.success) {
+                    throw new Error(challengeData.message);
+                }
+                
+                showStatus('🔄 Signing challenge...', 'info');
+                
+                // Sign challenge
+                const signature = await signChallenge(challengeData.data.challenge, privateKey);
+                
+                // Verify
+                const verifyResponse = await fetch('http://localhost:5000/api/auth/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        challenge: challengeData.data.challenge,
+                        signature: signature
+                    })
+                });
+                
+                const verifyData = await verifyResponse.json();
+                
+                if (!verifyData.success) {
+                    throw new Error(verifyData.message);
+                }
+                
+                // Store token
+                localStorage.setItem('authToken', verifyData.data.token);
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', 'Quick Test User');
+                
+                showStatus(`✅ Login Successful!<br><br>
+                    <strong>Email:</strong> ${email}<br>
+                    <strong>Token:</strong> ${verifyData.data.token.substring(0, 30)}...<br><br>
+                    Token saved to localStorage. You can now submit code!<br><br>
+                    <button onclick="window.location.href='problems.html'">Go to Practice Problems →</button>
+                `, 'success');
+                
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}<br><br>
+                    Try clearing storage and login again.`, 'error');
+                console.error('Login error:', error);
+            }
+        }
+
+        async function testSubmission() {
+            try {
+                const token = localStorage.getItem('authToken');
+                
+                if (!token) {
+                    showStatus('❌ No token found! Click "Quick Login" first.', 'error');
+                    return;
+                }
+                
+                showStatus('🔄 Testing code submission...', 'info');
+                
+                const response = await fetch('http://localhost:5000/api/coding/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        questionId: '1',
+                        language: 'python',
+                        code: 'def twoSum(nums, target):\\n    for i in range(len(nums)):\\n        for j in range(i+1, len(nums)):\\n            if nums[i] + nums[j] == target:\\n                return [i, j]\\n    return []',
+                        timeTaken: 30
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showStatus(`✅ Submission Successful!<br><br>
+                        <strong>Status:</strong> ${data.data.status}<br>
+                        <strong>Score:</strong> ${data.data.score}/100<br>
+                        <strong>Test Cases Passed:</strong> ${data.data.testCasesPassed}/${data.data.totalTestCases}<br>
+                        <strong>Feedback:</strong> ${data.data.feedback}<br><br>
+                        <pre>${JSON.stringify(data.data.testResults, null, 2)}</pre>
+                    `, 'success');
+                } else {
+                    showStatus(`❌ Submission Failed: ${data.message}`, 'error');
+                }
+                
+            } catch (error) {
+                showStatus(`❌ Error: ${error.message}`, 'error');
+                console.error('Test error:', error);
+            }
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            showStatus('🗑️ Storage cleared! Click "Quick Login" to login again.', 'info');
+        }
+
+        // Check if already logged in
+        window.onload = function() {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                showStatus(`✅ Already logged in!<br><br>
+                    <strong>Email:</strong> ${localStorage.getItem('userEmail')}<br>
+                    <strong>Token:</strong> ${token.substring(0, 30)}...<br><br>
+                    You can test submission or go to practice problems.<br><br>
+                    <button onclick="window.location.href='problems.html'">Go to Practice Problems →</button>
+                `, 'success');
+            } else {
+                showStatus('ℹ️ Not logged in. Click "Quick Login" to get started.', 'info');
+            }
+        };
+    </script>
+</body>
+</html>

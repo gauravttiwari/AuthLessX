@@ -383,6 +383,7 @@
 
     <!-- Monaco Editor Loader -->
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+    <script src="js/questions-bank.js"></script>
     <script src="js/crypto.js"></script>
     <script src="js/coding.js"></script>
     <script>
@@ -425,22 +426,48 @@
 
         async function loadQuestion() {
             const token = localStorage.getItem('authToken');
-            const category = sessionStorage.getItem('codingCategory');
+            
+            // Get parameters from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            let category = urlParams.get('category');
+            let problemId = urlParams.get('problemId');
+            let title = urlParams.get('title');
+            
+            // Fallback to sessionStorage if URL params not available
+            if (!category) {
+                category = sessionStorage.getItem('codingCategory');
+            } else {
+                sessionStorage.setItem('codingCategory', category);
+            }
+            
+            if (!problemId) {
+                problemId = sessionStorage.getItem('problemId');
+            } else {
+                sessionStorage.setItem('problemId', problemId);
+            }
 
-            if (!token || !category) {
-                window.location.href = 'index.html';
+            if (!token) {
+                window.location.href = 'login.html?mode=signin';
+                return;
+            }
+            
+            if (!category || !problemId) {
+                window.location.href = 'core-skills.html';
                 return;
             }
 
             try {
-                const response = await fetch(`http://localhost:5000/api/coding/questions/${category}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (!response.ok) throw new Error('Failed to load question');
-
-                const data = await response.json();
-                currentQuestion = data.data;
+                // Load question from questions bank
+                currentQuestion = questionsBank[problemId];
+                
+                if (!currentQuestion) {
+                    alert(`Question with ID ${problemId} not found!`);
+                    window.location.href = 'core-skills.html';
+                    return;
+                }
+                
+                // Add questionId for backend submission
+                currentQuestion.questionId = problemId;
 
                 displayQuestion(currentQuestion);
                 startTimer(currentQuestion.timeLimit * 60);
@@ -450,7 +477,7 @@
                 document.getElementById('coding-interface').style.display = 'flex';
             } catch (error) {
                 alert('Failed to load question: ' + error.message);
-                window.location.href = 'coding-category.html';
+                window.location.href = 'core-skills.html';
             }
         }
 
@@ -562,6 +589,13 @@
 
             try {
                 const token = localStorage.getItem('authToken');
+                
+                console.log('Submitting code...');
+                console.log('Question ID:', currentQuestion.questionId);
+                console.log('Language:', currentLanguage);
+                console.log('Code length:', code.length);
+                console.log('Time taken:', timeTaken);
+                
                 const response = await fetch('http://localhost:5000/api/coding/submit', {
                     method: 'POST',
                     headers: {
@@ -576,14 +610,22 @@
                     })
                 });
 
-                if (!response.ok) throw new Error('Submission failed');
-
+                console.log('Response status:', response.status);
+                console.log('Response ok:', response.ok);
+                
+                // Try to get the response body even if not ok
                 const result = await response.json();
+                console.log('Response data:', result);
+                
+                if (!response.ok) {
+                    throw new Error(result.message || 'Submission failed');
+                }
                 
                 // Store result and redirect
                 sessionStorage.setItem('codingResult', JSON.stringify(result.data));
                 window.location.href = 'coding-result.html';
             } catch (error) {
+                console.error('Submission error:', error);
                 alert('Error submitting code: ' + error.message);
                 document.getElementById('submit-btn').disabled = false;
                 document.getElementById('submit-btn').textContent = 'Submit Code';
@@ -618,5 +660,6 @@
             }
         });
     </script>
+    <script src="js/auth.js"></script>
 </body>
 </html>

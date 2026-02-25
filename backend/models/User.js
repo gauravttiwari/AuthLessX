@@ -13,24 +13,10 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         trim: true
     },
-    publicKeys: [{
-        key: {
-            type: String,
-            required: true
-        },
-        deviceInfo: {
-            type: String,
-            default: 'Unknown Device'
-        },
-        createdAt: {
-            type: Date,
-            default: Date.now
-        },
-        lastUsed: {
-            type: Date,
-            default: Date.now
-        }
-    }],
+    publicKey: {
+        type: String,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now

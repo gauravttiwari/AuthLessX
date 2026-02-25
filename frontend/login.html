@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"="width=device-width, initial-scale=1.0">
+    <title>Sign In - AuthLessX</title>
+    <link rel="stylesheet" href="css/style-new.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <h1 onclick="window.location.href='home.html'">🔐 AuthLessX</h1>
+                <p>Passwordless Authentication</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab" id="signup-tab" onclick="showAuthTab('signup')">Sign Up</button>
+                <button class="auth-tab active" id="signin-tab" onclick="showAuthTab('signin')">Sign In</button>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div class="auth-form" id="signup-form">
+                <h2>Create Your Account</h2>
+                <p class="auth-subtitle">Your cryptographic keys will be generated automatically</p>
+                
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label for="signup-name">Name</label>
+                        <input type="text" id="signup-name" required placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" required placeholder="Enter your email">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Create Account</button>
+                </form>
+
+                <div id="signup-status" class="status-message"></div>
+                
+                <p class="auth-info">
+                    ✓ No passwords to remember<br>
+                    ✓ Military-grade encryption<br>
+                    ✓ Access from any device
+                </p>
+
+                <div class="auth-switch">
+                    <p>Already have an account? <a href="#" onclick="showAuthTab('signin'); return false;">Sign In here</a></p>
+                </div>
+            </div>
+
+            <!-- Sign In Form -->
+            <div class="auth-form active" id="signin-form">
+                <h2>Welcome Back</h2>
+                <p class="auth-subtitle">Sign in using your cryptographic key</p>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" required placeholder="Enter your email">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Sign In</button>
+                </form>
+
+                <div id="login-status" class="status-message"></div>
+
+                <p class="auth-info">
+                    💡 Your private key is stored securely on this device
+                </p>
+
+                <div class="auth-switch">
+                    <p>Not registered yet? <a href="#" onclick="showAuthTab('signup'); return false;">Click here to Sign Up</a></p>
+                </div>
+            </div>
+
+            <div class="auth-footer">
+                <a href="home.html">← Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/crypto.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Debug: Check if functions are loaded
+        console.log('🔧 Scripts loaded');
+        
+        // Define tab switching function directly here to ensure it's available
+        function showAuthTab(tab) {
+            console.log('🔧 showAuthTab called with:', tab);
+            
+            const signupForm = document.getElementById('signup-form');
+            const loginForm = document.getElementById('signin-form');
+            const tabButtons = document.querySelectorAll('.auth-tab');
+
+            console.log('🔧 Forms found:', { signup: !!signupForm, login: !!loginForm });
+
+            if (!signupForm || !loginForm) {
+                console.error('❌ Required form elements not found');
+                return;
+            }
+
+            // Clear all active states
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            signupForm.classList.remove('active');
+            loginForm.classList.remove('active');
+
+            if (tab === 'signup') {
+                signupForm.classList.add('active');
+                document.getElementById('signup-tab').classList.add('active');
+                console.log('✅ Switched to signup tab');
+            } else {
+                loginForm.classList.add('active');
+                document.getElementById('signin-tab').classList.add('active');
+                console.log('✅ Switched to signin tab');
+            }
+
+            // Clear status messages
+            const signupStatus = document.getElementById('signup-status');
+            const loginStatus = document.getElementById('login-status');
+            if (signupStatus) signupStatus.style.display = 'none';
+            if (loginStatus) loginStatus.style.display = 'none';
+        }
+        
+        // Make function globally available
+        window.showAuthTab = showAuthTab;
+        
+        // Check URL parameter and show appropriate form
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 DOM loaded');
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+            
+            if (mode === 'signup') {
+                showAuthTab('signup');
+            } else {
+                // Default to signin
+                showAuthTab('signin');
+            }
+        });
+    </script>
+</body>
+</html>
